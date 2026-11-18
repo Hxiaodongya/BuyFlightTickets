@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>航班价格追踪</title>
+    <link rel="stylesheet" href="dashboard.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>航班价格追踪</h1>
+        <p>中国国际航空 · 中国南方航空</p>
+      </div>
+      <div class="top-actions">
+        <span id="global-status" role="status" aria-live="polite">读取中</span>
+        <button id="run-now" class="primary-button" type="button">立即采集</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="section plans-section" aria-labelledby="plans-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="plans-title">查询计划</h2>
+          </div>
+        </div>
+
+        <form id="plan-form" novalidate>
+          <div class="form-grid">
+            <label>
+              计划名称
+              <input id="plan-name" name="name" type="text" maxlength="80" placeholder="留空时按航线命名">
+            </label>
+            <label>
+              出发地名称
+              <input id="origin-name" name="originName" type="text" placeholder="杭州萧山">
+            </label>
+            <label>
+              出发机场三字码
+              <input id="origin-code" name="originCode" type="text" maxlength="3" placeholder="HGH" required>
+            </label>
+            <label>
+              到达地名称
+              <input id="destination-name" name="destinationName" type="text" placeholder="长春龙嘉">
+            </label>
+            <label>
+              到达机场三字码
+              <input id="destination-code" name="destinationCode" type="text" maxlength="3" placeholder="CGQ" required>
+            </label>
+            <label>
+              成人乘客数
+              <input id="adult-count" name="adultCount" type="number" min="1" max="9" value="1" required>
+            </label>
+            <label>
+              舱位
+              <select id="cabin" name="cabin">
+                <option value="economy">经济舱</option>
+                <option value="business">公务舱</option>
+                <option value="first">头等舱</option>
+              </select>
+            </label>
+            <label>
+              每日采集时间
+              <input id="collection-time" name="collectionTime" type="time" value="09:00" required>
+            </label>
+          </div>
+
+          <div class="date-editor">
+            <label for="travel-date">目标出行日期</label>
+            <div class="date-input-row">
+              <input id="travel-date" type="date">
+              <button id="add-date" type="button">添加日期</button>
+            </div>
+            <ul id="selected-dates" class="date-list" aria-label="已添加的出行日期"></ul>
+          </div>
+
+          <fieldset class="choice-group">
+            <legend>采集航司</legend>
+            <label><input name="airlineCodes" type="checkbox" value="CA" checked> 中国国际航空（CA）</label>
+            <label><input name="airlineCodes" type="checkbox" value="CZ" checked> 中国南方航空（CZ）</label>
+          </fieldset>
+
+          <label class="enabled-option">
+            <input id="plan-enabled" type="checkbox" checked>
+            启用每日采集
+          </label>
+
+          <p id="plan-error" class="form-error" role="alert"></p>
+          <div class="form-actions">
+            <button class="primary-button" type="submit">保存计划</button>
+            <button id="cancel-edit" type="button" hidden>取消编辑</button>
+          </div>
+        </form>
+
+        <div id="plan-list" class="plan-list" aria-live="polite"></div>
+      </section>
+
+      <section class="section history-section" aria-labelledby="history-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="history-title">价格历史</h2>
+            <p class="section-subtitle">列表价（未含税费）</p>
+          </div>
+          <button id="refresh-data" type="button">刷新数据</button>
+        </div>
+
+        <div class="filters-grid">
+          <label>
+            查询路线
+            <select id="filter-plan"></select>
+          </label>
+          <label>
+            出行日期
+            <select id="filter-date"></select>
+          </label>
+          <fieldset class="segmented-group">
+            <legend>行程类型</legend>
+            <label><input type="radio" name="tripType" value="all" checked><span>不限</span></label>
+            <label><input type="radio" name="tripType" value="direct"><span>直达</span></label>
+            <label><input type="radio" name="tripType" value="transfer"><span>中转</span></label>
+          </fieldset>
+          <fieldset class="segmented-group">
+            <legend>筛选方式</legend>
+            <label><input type="radio" name="filterMode" value="airline" checked><span>按航司</span></label>
+            <label><input type="radio" name="filterMode" value="flight"><span>按航班</span></label>
+          </fieldset>
+        </div>
+
+        <fieldset class="value-filter">
+          <legend id="value-filter-title">航司</legend>
+          <div id="value-filter-options" class="value-options"></div>
+        </fieldset>
+
+        <p id="chart-empty" class="empty-state" role="status" hidden>当前筛选条件下没有采集记录</p>
+        <div id="chart-frame" class="chart-frame">
+          <svg id="price-chart" viewBox="0 0 1000 430" role="img" aria-label="航班列表价历史折线图"></svg>
+          <ul id="chart-legend" class="chart-legend" aria-label="航班系列图例"></ul>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">采集日期</th>
+                <th scope="col">出行日期</th>
+                <th scope="col">航司</th>
+                <th scope="col">航班</th>
+                <th scope="col">行程</th>
+                <th scope="col">舱位</th>
+                <th scope="col">列表价（未含税费）</th>
+              </tr>
+            </thead>
+            <tbody id="observation-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section runs-section" aria-labelledby="runs-title">
+        <h2 id="runs-title">采集记录</h2>
+        <div id="run-list" class="run-list"></div>
+      </section>
+    </main>
+    <script type="module" src="dashboard.js"></script>
+  </body>
+</html>

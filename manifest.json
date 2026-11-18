@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "航班价格追踪",
+  "version": "0.1.0",
+  "description": "在本地记录国航和南航公开航班列表价变化。",
+  "permissions": ["alarms", "storage"],
+  "host_permissions": [
+    "https://www.airchina.com.cn/*",
+    "https://b2c.csair.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "航班价格追踪",
+    "default_popup": "src/popup/index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.airchina.com.cn/*"],
+      "js": ["src/collectors/price-parser.js", "src/collectors/airchina.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://b2c.csair.com/*"],
+      "js": ["src/collectors/price-parser.js", "src/collectors/csair.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
