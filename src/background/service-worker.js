@@ -29,15 +29,10 @@ async function seedExamplePlan() {
 
   await storage.savePlan({
     id: "example-hgh-cgq",
-    name: "杭州 - 长春",
-    originName: "杭州萧山",
-    originCode: "HGH",
-    destinationName: "长春龙嘉",
-    destinationCode: "CGQ",
+    originCityId: "city-hgh",
+    destinationCityId: "city-cgq",
     travelDates: ["2027-02-04", "2027-02-05"],
     airlineCodes: ["CA", "CZ"],
-    adultCount: 1,
-    cabin: "economy",
     collectionTime: "09:00",
     enabled: true,
   });

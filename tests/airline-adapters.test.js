@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
+import { airlineAdapters } from "../src/collectors/airline-config.js";
 
 const parserSource = await readFile(
   new URL("../src/collectors/price-parser.js", import.meta.url),
@@ -10,6 +11,34 @@ const parserSource = await readFile(
 const context = vm.createContext({ console });
 vm.runInContext(parserSource, context);
 const parser = context.FlightPriceParser;
+
+const cityPlan = {
+  originCityId: "city-hgh",
+  originCityName: "杭州",
+  destinationCityId: "city-cgq",
+  destinationCityName: "长春",
+  travelDates: ["2027-02-04"],
+};
+
+test("builds official airline search entry URLs from city plans", () => {
+  const airChinaUrl = new URL(
+    airlineAdapters.CA.buildSearchUrl({
+      plan: cityPlan,
+      travelDate: "2027-02-04",
+    }),
+  );
+  const chinaSouthernUrl = new URL(
+    airlineAdapters.CZ.buildSearchUrl({
+      plan: cityPlan,
+      travelDate: "2027-02-04",
+    }),
+  );
+
+  assert.equal(airChinaUrl.protocol, "https:");
+  assert.equal(airChinaUrl.hostname, "m.airchina.com.cn");
+  assert.equal(chinaSouthernUrl.protocol, "https:");
+  assert.equal(chinaSouthernUrl.hostname, "b2c.csair.com");
+});
 
 test("parses Chinese yuan fares and comma-separated amounts", () => {
   assert.equal(parser.parseListedFare("票面价 ¥ 1,280"), 1280);

@@ -1,4 +1,4 @@
-import { normalizePlan } from "./domain.js";
+import { migrateStoredPlan, normalizePlan } from "./domain.js";
 
 const PLAN_PREFIX = "plan:";
 const RUN_PREFIX = "run:";
@@ -22,7 +22,25 @@ export function createStorage(storageArea) {
 
   return {
     async listPlans() {
-      return listByPrefix(PLAN_PREFIX);
+      const values = await storageArea.get(null);
+      const entries = Object.entries(values).filter(([key]) =>
+        hasPrefix(key, PLAN_PREFIX),
+      );
+      const migratedEntries = entries.map(([key, value]) => [
+        key,
+        migrateStoredPlan(value),
+      ]);
+      const changedPlans = Object.fromEntries(
+        migratedEntries.filter(([key, value]) =>
+          JSON.stringify(values[key]) !== JSON.stringify(value),
+        ),
+      );
+
+      if (Object.keys(changedPlans).length > 0) {
+        await storageArea.set(changedPlans);
+      }
+
+      return migratedEntries.map(([, value]) => value);
     },
 
     async savePlan(plan) {

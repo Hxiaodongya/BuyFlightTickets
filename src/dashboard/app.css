@@ -1,0 +1,274 @@
+:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #202b32;
+  background: #f6f8f9;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f6f8f9;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.dashboard-shell {
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 76px;
+  padding: 12px max(20px, calc((100vw - 1180px) / 2));
+  background: #ffffff;
+  border-bottom: 1px solid #d9e0e4;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.35;
+}
+
+.topbar p {
+  margin: 3px 0 0;
+  color: #65737c;
+  font-size: 13px;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dashboard-main {
+  display: grid;
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+.dashboard-main > .el-alert {
+  margin-top: 16px;
+}
+
+.plans-section,
+.history-section,
+.runs-section {
+  min-width: 0;
+  padding: 26px 0 30px;
+  border-bottom: 1px solid #d9e0e4;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.section-subtitle,
+.muted-text {
+  margin: 4px 0 0;
+  color: #687780;
+  font-size: 13px;
+}
+
+.row-warning {
+  margin-left: 8px;
+}
+
+.plan-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 18px;
+}
+
+.plan-form-grid .el-select,
+.plan-form-grid .el-time-select,
+.full-width {
+  width: 100%;
+}
+
+.plan-form-footer {
+  align-items: center;
+}
+
+.migration-alert {
+  margin-bottom: 18px;
+}
+
+.history-filters {
+  display: grid;
+  grid-template-columns: minmax(160px, 1.25fr) minmax(150px, 1fr) auto auto;
+  align-items: end;
+  gap: 0 18px;
+}
+
+.history-filter-item {
+  display: grid;
+  gap: 6px;
+  color: #3f4d56;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.filter-select {
+  width: 100%;
+}
+
+.value-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  min-height: 34px;
+  margin-bottom: 12px;
+}
+
+.filter-caption {
+  color: #3f4d56;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.chart-scroll {
+  overflow-x: auto;
+  border-top: 1px solid #d9e0e4;
+  border-bottom: 1px solid #d9e0e4;
+  background: #ffffff;
+}
+
+.price-chart {
+  display: block;
+  width: 100%;
+  min-width: 760px;
+  height: auto;
+  aspect-ratio: 1000 / 430;
+}
+
+.price-chart text {
+  fill: #5b6873;
+  font-size: 12px;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0;
+  padding: 14px 0;
+  list-style: none;
+}
+
+.chart-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #3f4b55;
+  font-size: 12px;
+}
+
+.legend-swatch {
+  width: 18px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.observation-table {
+  width: 100%;
+}
+
+.run-details summary {
+  color: #176e68;
+  cursor: pointer;
+}
+
+.run-details ul {
+  margin: 8px 0;
+  padding-left: 18px;
+  color: #596671;
+  font-size: 12px;
+}
+
+.run-error {
+  color: #a3322f;
+}
+
+.el-dialog {
+  max-width: 100%;
+}
+
+.el-dialog__body {
+  padding-top: 10px;
+}
+
+.el-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+}
+
+@media (max-width: 900px) {
+  .history-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .topbar {
+    align-items: flex-start;
+    padding: 14px 16px;
+  }
+
+  .topbar h1 {
+    font-size: 18px;
+  }
+
+  .top-actions {
+    align-items: flex-end;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .dashboard-main {
+    width: calc(100% - 32px);
+  }
+
+  .plans-section,
+  .history-section,
+  .runs-section {
+    padding: 20px 0 24px;
+  }
+
+  .plan-form-grid,
+  .history-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .el-table .cell {
+    white-space: normal;
+    word-break: break-word;
+  }
+}

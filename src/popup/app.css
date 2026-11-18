@@ -1,0 +1,82 @@
+:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #202b32;
+  background: #ffffff;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 360px;
+  min-width: 320px;
+  margin: 0;
+  padding: 16px;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #dce2e8;
+}
+
+.popup-header h1 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 650;
+}
+
+.fare-note {
+  margin: 14px 0 6px;
+  color: #61707a;
+  font-size: 12px;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  font-size: 14px;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #7b8790;
+}
+
+.status-dot--warning {
+  background: #d59122;
+}
+
+.status-dot--success {
+  background: #19856e;
+}
+
+.status-dot--danger {
+  background: #c34742;
+}
+
+.run-time,
+.run-counts {
+  margin: 5px 0;
+  color: #5d6b75;
+  font-size: 12px;
+}
+
+.collect-button {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.popup-shell .el-alert {
+  margin-top: 10px;
+}

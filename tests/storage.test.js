@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createStorage } from "../src/shared/storage.js";
 
-function createMemoryArea() {
-  const values = new Map();
+function createMemoryArea(initial = {}) {
+  const values = new Map(Object.entries(structuredClone(initial)));
 
   return {
     async get(keys) {
@@ -29,20 +29,80 @@ function createMemoryArea() {
 
 const basePlan = {
   id: "plan-1",
-  originCode: "HGH",
-  destinationCode: "CGQ",
+  originCityId: "city-hgh",
+  destinationCityId: "city-cgq",
   travelDates: ["2027-02-04"],
   airlineCodes: ["CA"],
 };
 
 test("upserts a plan by ID", async () => {
   const storage = createStorage(createMemoryArea());
-  await storage.savePlan({ ...basePlan, name: "first" });
-  await storage.savePlan({ ...basePlan, name: "updated" });
+  await storage.savePlan({ ...basePlan, collectionTime: "08:00" });
+  await storage.savePlan({ ...basePlan, collectionTime: "10:00" });
 
   const plans = await storage.listPlans();
   assert.equal(plans.length, 1);
-  assert.equal(plans[0].name, "updated");
+  assert.equal(plans[0].collectionTime, "10:00");
+});
+
+test("migrates a known legacy airport route to canonical city fields", async () => {
+  const area = createMemoryArea({
+    "plan:legacy": {
+      id: "legacy",
+      name: "杭州 - 长春",
+      originName: "杭州萧山",
+      originCode: "HGH",
+      destinationName: "长春龙嘉",
+      destinationCode: "CGQ",
+      travelDates: ["2027-02-04"],
+      airlineCodes: ["CA"],
+      adultCount: 2,
+      cabin: "business",
+      collectionTime: "09:00",
+      enabled: true,
+      createdAt: "2026-11-01T00:00:00.000Z",
+      updatedAt: "2026-11-02T00:00:00.000Z",
+    },
+  });
+  const storage = createStorage(area);
+
+  const [plan] = await storage.listPlans();
+  const [savedPlan] = Object.values(await area.get(null));
+
+  assert.equal(plan.id, "legacy");
+  assert.equal(plan.originCityName, "杭州");
+  assert.equal(plan.destinationCityName, "长春");
+  assert.equal(plan.originCityId, "city-hgh");
+  assert.equal(plan.destinationCityId, "city-cgq");
+  assert.equal(plan.createdAt, "2026-11-01T00:00:00.000Z");
+  assert.equal(plan.updatedAt, "2026-11-02T00:00:00.000Z");
+  assert.equal(Object.hasOwn(savedPlan, "originCode"), false);
+  assert.equal(Object.hasOwn(savedPlan, "name"), false);
+  assert.equal(Object.hasOwn(savedPlan, "adultCount"), false);
+  assert.equal(Object.hasOwn(savedPlan, "cabin"), false);
+});
+
+test("retains unknown legacy routes disabled until the user selects cities", async () => {
+  const original = {
+    id: "legacy-unknown",
+    name: "旧路线",
+    originCode: "ZZZ",
+    destinationCode: "YYY",
+    travelDates: ["2027-02-04"],
+    airlineCodes: ["CA"],
+    enabled: true,
+  };
+  const storage = createStorage(createMemoryArea({ "plan:legacy-unknown": original }));
+
+  const [plan] = await storage.listPlans();
+
+  assert.equal(plan.id, "legacy-unknown");
+  assert.equal(plan.enabled, false);
+  assert.equal(plan.migrationStatus, "needs-city-selection");
+  assert.equal(plan.originCityId, "");
+  assert.equal(plan.destinationCityId, "");
+  assert.equal(plan.originCode, original.originCode);
+  assert.equal(plan.travelDates[0], original.travelDates[0]);
 });
 
 test("deletes a plan and its observations", async () => {

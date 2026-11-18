@@ -8,21 +8,29 @@ import {
 } from "../src/shared/domain.js";
 
 const validPlan = {
-  originCode: "HGH",
-  destinationCode: "CGQ",
+  originCityId: "city-hgh",
+  destinationCityId: "city-cgq",
   travelDates: ["2027-02-04", "2027-02-05"],
   airlineCodes: ["CA", "CZ"],
 };
 
-test("requires three-letter origin and destination airport codes", () => {
+test("requires known and different origin and destination cities", () => {
   const errors = validatePlan({
     ...validPlan,
-    originCode: "",
-    destinationCode: "Changchun",
+    originCityId: "unknown-city",
+    destinationCityId: "city-hgh",
   });
 
-  assert.ok(errors.originCode);
-  assert.ok(errors.destinationCode);
+  assert.ok(errors.originCityId);
+  assert.equal(errors.destinationCityId, undefined);
+  assert.ok(
+    validatePlan({
+      ...validPlan,
+      originCityId: "city-hgh",
+      destinationCityId: "city-hgh",
+    }).destinationCityId,
+  );
+  assert.ok(validatePlan({ ...validPlan, destinationCityId: "unknown-city" }).destinationCityId);
 });
 
 test("requires at least one valid travel date", () => {
@@ -39,20 +47,51 @@ test("requires at least one supported airline", () => {
   );
 });
 
-test("normalizes the example plan with one adult and economy defaults", () => {
+test("normalizes a city-only plan and discards legacy or unsupported fields", () => {
   const plan = normalizePlan({
     ...validPlan,
-    originName: "杭州萧山",
-    destinationName: "长春龙嘉",
+    originCityName: "错误的出发地",
+    destinationCityName: "错误的到达地",
+    name: "用户填写名称",
+    originCode: "HGH",
+    destinationCode: "CGQ",
+    adultCount: 7,
+    cabin: "business",
   });
 
-  assert.equal(plan.adultCount, 1);
-  assert.equal(plan.cabin, "economy");
+  assert.equal(plan.originCityId, "city-hgh");
+  assert.equal(plan.destinationCityId, "city-cgq");
+  assert.equal(plan.originCityName, "杭州");
+  assert.equal(plan.destinationCityName, "长春");
   assert.equal(plan.collectionTime, "09:00");
-  assert.equal(plan.originName, "杭州萧山");
-  assert.equal(plan.destinationName, "长春龙嘉");
   assert.deepEqual(plan.travelDates, ["2027-02-04", "2027-02-05"]);
   assert.deepEqual(plan.airlineCodes, ["CA", "CZ"]);
+  for (const key of ["name", "originCode", "destinationCode", "adultCount", "cabin"]) {
+    assert.equal(Object.hasOwn(plan, key), false);
+  }
+});
+
+test("stores city fields and fixed economy collection values on observations", () => {
+  const plan = normalizePlan({ ...validPlan, id: "plan-1" });
+  const [observation] = normalizeObservations(
+    plan,
+    "CA",
+    [{
+      travelDate: "2027-02-04",
+      flightNo: "CA123",
+      listedFareCny: 1280,
+      stopCount: 0,
+    }],
+    "2026-11-18T09:00:00+08:00",
+  );
+
+  assert.equal(observation.originCityId, "city-hgh");
+  assert.equal(observation.originCityName, "杭州");
+  assert.equal(observation.destinationCityId, "city-cgq");
+  assert.equal(observation.destinationCityName, "长春");
+  assert.equal(observation.adultCount, 1);
+  assert.equal(observation.cabin, "economy");
+  assert.equal(Object.hasOwn(observation, "originCode"), false);
 });
 
 test("builds a stable series key with an unknown fare product fallback", () => {

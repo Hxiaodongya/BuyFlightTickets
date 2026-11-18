@@ -1,0 +1,2901 @@
+[
+  {
+    "id": "city-ahj",
+    "name": "阿坝",
+    "pinyin": "aba",
+    "cityCode": "AHJ",
+    "airportCodes": [
+      "AHJ"
+    ]
+  },
+  {
+    "id": "city-yie",
+    "name": "阿尔山",
+    "pinyin": "aershan",
+    "cityCode": "YIE",
+    "airportCodes": [
+      "YIE"
+    ]
+  },
+  {
+    "id": "city-aku",
+    "name": "阿克苏",
+    "pinyin": "akesu",
+    "cityCode": "AKU",
+    "airportCodes": [
+      "AKU"
+    ]
+  },
+  {
+    "id": "city-aec",
+    "name": "阿拉尔",
+    "pinyin": "alaer",
+    "cityCode": "AEC",
+    "airportCodes": [
+      "ACF"
+    ]
+  },
+  {
+    "id": "city-alv",
+    "name": "阿拉善右旗",
+    "pinyin": "alashanyouqi",
+    "cityCode": "ALV",
+    "airportCodes": [
+      "RHT"
+    ]
+  },
+  {
+    "id": "city-alz",
+    "name": "阿拉善左旗",
+    "pinyin": "alashanzuoqi",
+    "cityCode": "ALZ",
+    "airportCodes": [
+      "AXF"
+    ]
+  },
+  {
+    "id": "city-aat",
+    "name": "阿勒泰",
+    "pinyin": "aletai",
+    "cityCode": "AAT",
+    "airportCodes": [
+      "AAT"
+    ]
+  },
+  {
+    "id": "city-aib",
+    "name": "阿里",
+    "pinyin": "ali",
+    "cityCode": "AIB",
+    "airportCodes": [
+      "NGQ"
+    ]
+  },
+  {
+    "id": "city-aeq",
+    "name": "阿旗",
+    "pinyin": "alukeerqinqi",
+    "cityCode": "AEQ",
+    "airportCodes": [
+      "AEQ"
+    ]
+  },
+  {
+    "id": "city-ar1",
+    "name": "阿荣旗",
+    "pinyin": "arongqi",
+    "cityCode": "AR1",
+    "airportCodes": [
+      "ROQ"
+    ]
+  },
+  {
+    "id": "city-aka",
+    "name": "安康",
+    "pinyin": "ankang",
+    "cityCode": "AKA",
+    "airportCodes": [
+      "AKA"
+    ]
+  },
+  {
+    "id": "city-aqg",
+    "name": "安庆",
+    "pinyin": "anqing",
+    "cityCode": "AQG",
+    "airportCodes": [
+      "AQG"
+    ]
+  },
+  {
+    "id": "city-ava",
+    "name": "安顺",
+    "pinyin": "anshun",
+    "cityCode": "AVA",
+    "airportCodes": [
+      "AVA"
+    ]
+  },
+  {
+    "id": "city-ayn",
+    "name": "安阳",
+    "pinyin": "anyang",
+    "cityCode": "AYN",
+    "airportCodes": [
+      "HQQ"
+    ]
+  },
+  {
+    "id": "city-aog",
+    "name": "鞍山",
+    "pinyin": "anshan",
+    "cityCode": "AOG",
+    "airportCodes": [
+      "AOG"
+    ]
+  },
+  {
+    "id": "city-mfm",
+    "name": "澳门",
+    "pinyin": "aomen",
+    "cityCode": "MFM",
+    "airportCodes": [
+      "MFM"
+    ]
+  },
+  {
+    "id": "city-rlk",
+    "name": "巴彦淖尔",
+    "pinyin": "bayannaoer",
+    "cityCode": "RLK",
+    "airportCodes": [
+      "RLK"
+    ]
+  },
+  {
+    "id": "city-bzq",
+    "name": "巴中",
+    "pinyin": "bazhong",
+    "cityCode": "BZQ",
+    "airportCodes": [
+      "BZX"
+    ]
+  },
+  {
+    "id": "city-dbc",
+    "name": "白城",
+    "pinyin": "baicheng",
+    "cityCode": "DBC",
+    "airportCodes": [
+      "DBC"
+    ]
+  },
+  {
+    "id": "city-cbm",
+    "name": "白山",
+    "pinyin": "baishan",
+    "cityCode": "CBM",
+    "airportCodes": [
+      "NBS"
+    ]
+  },
+  {
+    "id": "city-aeb",
+    "name": "百色",
+    "pinyin": "baise",
+    "cityCode": "AEB",
+    "airportCodes": [
+      "AEB"
+    ]
+  },
+  {
+    "id": "city-bav",
+    "name": "包头",
+    "pinyin": "baotou",
+    "cityCode": "BAV",
+    "airportCodes": [
+      "BAV"
+    ]
+  },
+  {
+    "id": "city-bsd",
+    "name": "保山",
+    "pinyin": "baoshan",
+    "cityCode": "BSD",
+    "airportCodes": [
+      "BSD"
+    ]
+  },
+  {
+    "id": "city-bhy",
+    "name": "北海",
+    "pinyin": "beihai",
+    "cityCode": "BHY",
+    "airportCodes": [
+      "BHY"
+    ]
+  },
+  {
+    "id": "city-bjs",
+    "name": "北京",
+    "pinyin": "beijing",
+    "cityCode": "BJS",
+    "airportCodes": [
+      "YUN",
+      "PEK",
+      "PKX"
+    ]
+  },
+  {
+    "id": "city-bfj",
+    "name": "毕节",
+    "pinyin": "bijie",
+    "cityCode": "BFJ",
+    "airportCodes": [
+      "BFJ"
+    ]
+  },
+  {
+    "id": "city-bbu",
+    "name": "滨州",
+    "pinyin": "binzhou",
+    "cityCode": "BBU",
+    "airportCodes": [
+      "CBZ"
+    ]
+  },
+  {
+    "id": "city-bpl",
+    "name": "博乐",
+    "pinyin": "bole",
+    "cityCode": "BPL",
+    "airportCodes": [
+      "BPL"
+    ]
+  },
+  {
+    "id": "city-cwj",
+    "name": "沧源",
+    "pinyin": "cangyuan",
+    "cityCode": "CWJ",
+    "airportCodes": [
+      "CWJ"
+    ]
+  },
+  {
+    "id": "city-bpx",
+    "name": "昌都",
+    "pinyin": "changdu",
+    "cityCode": "BPX",
+    "airportCodes": [
+      "BPX"
+    ]
+  },
+  {
+    "id": "city-cgd",
+    "name": "常德",
+    "pinyin": "changde",
+    "cityCode": "CGD",
+    "airportCodes": [
+      "CGD"
+    ]
+  },
+  {
+    "id": "city-czx",
+    "name": "常州",
+    "pinyin": "changzhou",
+    "cityCode": "CZX",
+    "airportCodes": [
+      "CZX"
+    ]
+  },
+  {
+    "id": "city-chg",
+    "name": "朝阳",
+    "pinyin": "chaoyang",
+    "cityCode": "CHG",
+    "airportCodes": [
+      "CHG"
+    ]
+  },
+  {
+    "id": "city-czg",
+    "name": "潮州",
+    "pinyin": "chaozhou",
+    "cityCode": "CZG",
+    "airportCodes": [
+      "SWA"
+    ]
+  },
+  {
+    "id": "city-hcz",
+    "name": "郴州",
+    "pinyin": "chenzhou",
+    "cityCode": "HCZ",
+    "airportCodes": [
+      "HCZ"
+    ]
+  },
+  {
+    "id": "city-ctu",
+    "name": "成都",
+    "pinyin": "chengdu",
+    "cityCode": "CTU",
+    "airportCodes": [
+      "CTU",
+      "TFU"
+    ]
+  },
+  {
+    "id": "city-cde",
+    "name": "承德",
+    "pinyin": "chengde",
+    "cityCode": "CDE",
+    "airportCodes": [
+      "CDE"
+    ]
+  },
+  {
+    "id": "city-juh",
+    "name": "池州",
+    "pinyin": "chizhou",
+    "cityCode": "JUH",
+    "airportCodes": [
+      "JUH"
+    ]
+  },
+  {
+    "id": "city-zjk",
+    "name": "赤城县",
+    "pinyin": "chi cheng xian",
+    "cityCode": "ZJK",
+    "airportCodes": [
+      "ZQZ"
+    ]
+  },
+  {
+    "id": "city-cif",
+    "name": "赤峰",
+    "pinyin": "chifeng",
+    "cityCode": "CIF",
+    "airportCodes": [
+      "CIF"
+    ]
+  },
+  {
+    "id": "city-ckg",
+    "name": "重庆",
+    "pinyin": "chongqing",
+    "cityCode": "CKG",
+    "airportCodes": [
+      "CKG"
+    ]
+  },
+  {
+    "id": "city-dax",
+    "name": "达州",
+    "pinyin": "dazhou",
+    "cityCode": "DAX",
+    "airportCodes": [
+      "DZH"
+    ]
+  },
+  {
+    "id": "city-dlu",
+    "name": "大理",
+    "pinyin": "dali",
+    "cityCode": "DLU",
+    "airportCodes": [
+      "DLU"
+    ]
+  },
+  {
+    "id": "city-dlc",
+    "name": "大连",
+    "pinyin": "dalian",
+    "cityCode": "DLC",
+    "airportCodes": [
+      "DLC"
+    ]
+  },
+  {
+    "id": "city-dqa",
+    "name": "大庆",
+    "pinyin": "daqing",
+    "cityCode": "DQA",
+    "airportCodes": [
+      "DQA"
+    ]
+  },
+  {
+    "id": "city-dat",
+    "name": "大同",
+    "pinyin": "datong",
+    "cityCode": "DAT",
+    "airportCodes": [
+      "DAT"
+    ]
+  },
+  {
+    "id": "city-ddg",
+    "name": "丹东",
+    "pinyin": "dandong",
+    "cityCode": "DDG",
+    "airportCodes": [
+      "DDG"
+    ]
+  },
+  {
+    "id": "city-dfa",
+    "name": "丹凤",
+    "pinyin": "danfeng",
+    "cityCode": "DFA",
+    "airportCodes": [
+      "DFA"
+    ]
+  },
+  {
+    "id": "city-dzc",
+    "name": "儋州",
+    "pinyin": "danzhou",
+    "cityCode": "DZC",
+    "airportCodes": [
+      "DXQ"
+    ]
+  },
+  {
+    "id": "city-dcc",
+    "name": "稻城",
+    "pinyin": "daocheng",
+    "cityCode": "DCC",
+    "airportCodes": [
+      "DCY"
+    ]
+  },
+  {
+    "id": "city-lum",
+    "name": "德宏",
+    "pinyin": "dehong",
+    "cityCode": "LUM",
+    "airportCodes": [
+      "LUM"
+    ]
+  },
+  {
+    "id": "city-dlf",
+    "name": "德令哈",
+    "pinyin": "delingha",
+    "cityCode": "DLF",
+    "airportCodes": [
+      "HXD"
+    ]
+  },
+  {
+    "id": "city-dqx",
+    "name": "德清",
+    "pinyin": "deqing",
+    "cityCode": "DQX",
+    "airportCodes": [
+      "DEQ"
+    ]
+  },
+  {
+    "id": "city-dig",
+    "name": "迪庆",
+    "pinyin": "diqing",
+    "cityCode": "DIG",
+    "airportCodes": [
+      "DIG"
+    ]
+  },
+  {
+    "id": "city-ddr",
+    "name": "定日县",
+    "pinyin": "dingri",
+    "cityCode": "DDR",
+    "airportCodes": [
+      "DDR"
+    ]
+  },
+  {
+    "id": "city-djc",
+    "name": "东极庙子湖",
+    "pinyin": "dongjimiaozihu",
+    "cityCode": "DJC",
+    "airportCodes": [
+      "DJC"
+    ]
+  },
+  {
+    "id": "city-dyn",
+    "name": "东阳",
+    "pinyin": "dongyang",
+    "cityCode": "DYN",
+    "airportCodes": [
+      "HEW"
+    ]
+  },
+  {
+    "id": "city-doy",
+    "name": "东营",
+    "pinyin": "dongying",
+    "cityCode": "DOY",
+    "airportCodes": [
+      "DOY"
+    ]
+  },
+  {
+    "id": "city-dnh",
+    "name": "敦煌",
+    "pinyin": "dunhuang",
+    "cityCode": "DNH",
+    "airportCodes": [
+      "DNH"
+    ]
+  },
+  {
+    "id": "city-ejq",
+    "name": "额济纳旗",
+    "pinyin": "ejinaqi",
+    "cityCode": "EJQ",
+    "airportCodes": [
+      "EJN"
+    ]
+  },
+  {
+    "id": "city-dsn",
+    "name": "鄂尔多斯",
+    "pinyin": "eerduosi",
+    "cityCode": "DSN",
+    "airportCodes": [
+      "DSN"
+    ]
+  },
+  {
+    "id": "city-etk",
+    "name": "鄂托克旗",
+    "pinyin": "etuokeqi",
+    "cityCode": "ETK",
+    "airportCodes": [
+      "OTO"
+    ]
+  },
+  {
+    "id": "city-otq",
+    "name": "鄂托克前旗",
+    "pinyin": "etuokeqianqi",
+    "cityCode": "OTQ",
+    "airportCodes": [
+      "OTQ"
+    ]
+  },
+  {
+    "id": "city-ezh",
+    "name": "鄂州",
+    "pinyin": "ezhou",
+    "cityCode": "EZH",
+    "airportCodes": [
+      "EHU"
+    ]
+  },
+  {
+    "id": "city-enh",
+    "name": "恩施",
+    "pinyin": "enshi",
+    "cityCode": "ENH",
+    "airportCodes": [
+      "ENH"
+    ]
+  },
+  {
+    "id": "city-erl",
+    "name": "二连浩特",
+    "pinyin": "erlianhaote",
+    "cityCode": "ERL",
+    "airportCodes": [
+      "ERL"
+    ]
+  },
+  {
+    "id": "city-fuo",
+    "name": "佛山",
+    "pinyin": "foshan",
+    "cityCode": "FUO",
+    "airportCodes": [
+      "FUO"
+    ]
+  },
+  {
+    "id": "city-foc",
+    "name": "福州",
+    "pinyin": "fuzhou",
+    "cityCode": "FOC",
+    "airportCodes": [
+      "FOC"
+    ]
+  },
+  {
+    "id": "city-fys",
+    "name": "抚远",
+    "pinyin": "fuyuan",
+    "cityCode": "FYS",
+    "airportCodes": [
+      "FYJ"
+    ]
+  },
+  {
+    "id": "city-fug",
+    "name": "阜阳",
+    "pinyin": "fuyang",
+    "cityCode": "FUG",
+    "airportCodes": [
+      "FUG"
+    ]
+  },
+  {
+    "id": "city-fyn",
+    "name": "富蕴",
+    "pinyin": "fuyun",
+    "cityCode": "FYN",
+    "airportCodes": [
+      "FYN"
+    ]
+  },
+  {
+    "id": "city-gzb",
+    "name": "甘孜",
+    "pinyin": "ganzi",
+    "cityCode": "GZB",
+    "airportCodes": [
+      "GZG"
+    ]
+  },
+  {
+    "id": "city-kow",
+    "name": "赣州",
+    "pinyin": "ganzhou",
+    "cityCode": "KOW",
+    "airportCodes": [
+      "KOW"
+    ]
+  },
+  {
+    "id": "city-khh",
+    "name": "高雄",
+    "pinyin": "gaoxiong",
+    "cityCode": "KHH",
+    "airportCodes": [
+      "KHH"
+    ]
+  },
+  {
+    "id": "city-goq",
+    "name": "格尔木",
+    "pinyin": "geermu",
+    "cityCode": "GOQ",
+    "airportCodes": [
+      "GOQ"
+    ]
+  },
+  {
+    "id": "city-gyc",
+    "name": "固原",
+    "pinyin": "guyuan",
+    "cityCode": "GYC",
+    "airportCodes": [
+      "GYU"
+    ]
+  },
+  {
+    "id": "city-gys",
+    "name": "广元",
+    "pinyin": "guangyuan",
+    "cityCode": "GYS",
+    "airportCodes": [
+      "GYS"
+    ]
+  },
+  {
+    "id": "city-can",
+    "name": "广州",
+    "pinyin": "guangzhou",
+    "cityCode": "CAN",
+    "airportCodes": [
+      "CAN"
+    ]
+  },
+  {
+    "id": "city-kwe",
+    "name": "贵阳",
+    "pinyin": "guiyang",
+    "cityCode": "KWE",
+    "airportCodes": [
+      "KWE"
+    ]
+  },
+  {
+    "id": "city-kwl",
+    "name": "桂林",
+    "pinyin": "guilin",
+    "cityCode": "KWL",
+    "airportCodes": [
+      "KWL"
+    ]
+  },
+  {
+    "id": "city-glq",
+    "name": "果洛",
+    "pinyin": "guoluo",
+    "cityCode": "GLQ",
+    "airportCodes": [
+      "GMQ"
+    ]
+  },
+  {
+    "id": "city-hrb",
+    "name": "哈尔滨",
+    "pinyin": "haerbin",
+    "cityCode": "HRB",
+    "airportCodes": [
+      "HRB"
+    ]
+  },
+  {
+    "id": "city-hmi",
+    "name": "哈密",
+    "pinyin": "hami",
+    "cityCode": "HMI",
+    "airportCodes": [
+      "HMI"
+    ]
+  },
+  {
+    "id": "city-hak",
+    "name": "海口",
+    "pinyin": "haikou",
+    "cityCode": "HAK",
+    "airportCodes": [
+      "HAK"
+    ]
+  },
+  {
+    "id": "city-hld",
+    "name": "海拉尔",
+    "pinyin": "hailaer",
+    "cityCode": "HLD",
+    "airportCodes": [
+      "HLD"
+    ]
+  },
+  {
+    "id": "city-hdg",
+    "name": "邯郸",
+    "pinyin": "handan",
+    "cityCode": "HDG",
+    "airportCodes": [
+      "HDG"
+    ]
+  },
+  {
+    "id": "city-hzg",
+    "name": "汉中",
+    "pinyin": "hanzhong",
+    "cityCode": "HZG",
+    "airportCodes": [
+      "HZG"
+    ]
+  },
+  {
+    "id": "city-hgh",
+    "name": "杭州",
+    "pinyin": "hangzhou",
+    "cityCode": "HGH",
+    "airportCodes": [
+      "HGH"
+    ]
+  },
+  {
+    "id": "city-hfe",
+    "name": "合肥",
+    "pinyin": "hefei",
+    "cityCode": "HFE",
+    "airportCodes": [
+      "HFE",
+      "FDA"
+    ]
+  },
+  {
+    "id": "city-htn",
+    "name": "和田",
+    "pinyin": "hetian",
+    "cityCode": "HTN",
+    "airportCodes": [
+      "HTN"
+    ]
+  },
+  {
+    "id": "city-hcj",
+    "name": "河池",
+    "pinyin": "hechi",
+    "cityCode": "HCJ",
+    "airportCodes": [
+      "HCJ"
+    ]
+  },
+  {
+    "id": "city-hze",
+    "name": "菏泽",
+    "pinyin": "heze",
+    "cityCode": "HZE",
+    "airportCodes": [
+      "HZA"
+    ]
+  },
+  {
+    "id": "city-hek",
+    "name": "黑河",
+    "pinyin": "heihe",
+    "cityCode": "HEK",
+    "airportCodes": [
+      "HEK"
+    ]
+  },
+  {
+    "id": "city-hcn",
+    "name": "恒春",
+    "pinyin": "hengchun",
+    "cityCode": "HCN",
+    "airportCodes": [
+      "HCN"
+    ]
+  },
+  {
+    "id": "city-hny",
+    "name": "衡阳",
+    "pinyin": "hengyang",
+    "cityCode": "HNY",
+    "airportCodes": [
+      "HNY"
+    ]
+  },
+  {
+    "id": "city-hye",
+    "name": "红原",
+    "pinyin": "hongyuan",
+    "cityCode": "HYE",
+    "airportCodes": [
+      "AHJ"
+    ]
+  },
+  {
+    "id": "city-het",
+    "name": "呼和浩特",
+    "pinyin": "huhehaote",
+    "cityCode": "HET",
+    "airportCodes": [
+      "HET"
+    ]
+  },
+  {
+    "id": "city-hlj",
+    "name": "呼伦贝尔",
+    "pinyin": "hulunbeier",
+    "cityCode": "HLJ",
+    "airportCodes": [
+      "HLD"
+    ]
+  },
+  {
+    "id": "city-hun",
+    "name": "花莲",
+    "pinyin": "hualian",
+    "cityCode": "HUN",
+    "airportCodes": [
+      "HUN"
+    ]
+  },
+  {
+    "id": "city-htc",
+    "name": "花土沟",
+    "pinyin": "huatugou",
+    "cityCode": "HTC",
+    "airportCodes": [
+      "HTT"
+    ]
+  },
+  {
+    "id": "city-hjj",
+    "name": "怀化",
+    "pinyin": "huaihua",
+    "cityCode": "HJJ",
+    "airportCodes": [
+      "HJJ"
+    ]
+  },
+  {
+    "id": "city-hia",
+    "name": "淮安",
+    "pinyin": "huaian",
+    "cityCode": "HIA",
+    "airportCodes": [
+      "HIA"
+    ]
+  },
+  {
+    "id": "city-txn",
+    "name": "黄山",
+    "pinyin": "huangshan",
+    "cityCode": "TXN",
+    "airportCodes": [
+      "TXN"
+    ]
+  },
+  {
+    "id": "city-hyb",
+    "name": "黄岩",
+    "pinyin": "huangyan",
+    "cityCode": "HYB",
+    "airportCodes": [
+      "HYN"
+    ]
+  },
+  {
+    "id": "city-huz",
+    "name": "惠州",
+    "pinyin": "huizhou",
+    "cityCode": "HUZ",
+    "airportCodes": [
+      "HUZ"
+    ]
+  },
+  {
+    "id": "city-hla",
+    "name": "霍林郭勒",
+    "pinyin": "huolinguole",
+    "cityCode": "HLA",
+    "airportCodes": [
+      "HUO"
+    ]
+  },
+  {
+    "id": "city-jxa",
+    "name": "鸡西",
+    "pinyin": "jixi",
+    "cityCode": "JXA",
+    "airportCodes": [
+      "JXA"
+    ]
+  },
+  {
+    "id": "city-tna",
+    "name": "济南",
+    "pinyin": "jinan",
+    "cityCode": "TNA",
+    "airportCodes": [
+      "TNA"
+    ]
+  },
+  {
+    "id": "city-jng",
+    "name": "济宁",
+    "pinyin": "jining",
+    "cityCode": "JNG",
+    "airportCodes": [
+      "JNG"
+    ]
+  },
+  {
+    "id": "city-jgq",
+    "name": "加格达奇",
+    "pinyin": "jiagedaqi",
+    "cityCode": "JGQ",
+    "airportCodes": [
+      "JGD"
+    ]
+  },
+  {
+    "id": "city-jmu",
+    "name": "佳木斯",
+    "pinyin": "jiamusi",
+    "cityCode": "JMU",
+    "airportCodes": [
+      "JMU"
+    ]
+  },
+  {
+    "id": "city-cyi",
+    "name": "嘉义",
+    "pinyin": "jiayi",
+    "cityCode": "CYI",
+    "airportCodes": [
+      "CYI"
+    ]
+  },
+  {
+    "id": "city-jgn",
+    "name": "嘉峪关",
+    "pinyin": "jiayuguan",
+    "cityCode": "JGN",
+    "airportCodes": [
+      "JGN"
+    ]
+  },
+  {
+    "id": "city-jid",
+    "name": "建德",
+    "pinyin": "jiande",
+    "cityCode": "JID",
+    "airportCodes": [
+      "JDE"
+    ]
+  },
+  {
+    "id": "city-jsj",
+    "name": "建三江",
+    "pinyin": "jiansanjiang",
+    "cityCode": "JSJ",
+    "airportCodes": [
+      "JSJ"
+    ]
+  },
+  {
+    "id": "city-jyn",
+    "name": "揭阳",
+    "pinyin": "jieyang",
+    "cityCode": "JYN",
+    "airportCodes": [
+      "SWA"
+    ]
+  },
+  {
+    "id": "city-jic",
+    "name": "金昌",
+    "pinyin": "jinchang",
+    "cityCode": "JIC",
+    "airportCodes": [
+      "JIC"
+    ]
+  },
+  {
+    "id": "city-knh",
+    "name": "金门",
+    "pinyin": "jinmen",
+    "cityCode": "KNH",
+    "airportCodes": [
+      "KNH"
+    ]
+  },
+  {
+    "id": "city-jnz",
+    "name": "锦州",
+    "pinyin": "jinzhou",
+    "cityCode": "JNZ",
+    "airportCodes": [
+      "JNZ"
+    ]
+  },
+  {
+    "id": "city-jjb",
+    "name": "晋江",
+    "pinyin": "jinjiang",
+    "cityCode": "JJB",
+    "airportCodes": [
+      "JJN"
+    ]
+  },
+  {
+    "id": "city-shs",
+    "name": "荆州",
+    "pinyin": "jingzhou",
+    "cityCode": "SHS",
+    "airportCodes": [
+      "SHS"
+    ]
+  },
+  {
+    "id": "city-jgs",
+    "name": "井冈山",
+    "pinyin": "jinggangshan",
+    "cityCode": "JGS",
+    "airportCodes": [
+      "JGS"
+    ]
+  },
+  {
+    "id": "city-jdz",
+    "name": "景德镇",
+    "pinyin": "jingdezhen",
+    "cityCode": "JDZ",
+    "airportCodes": [
+      "JDZ"
+    ]
+  },
+  {
+    "id": "city-jih",
+    "name": "景洪",
+    "pinyin": "jinghong",
+    "cityCode": "JIH",
+    "airportCodes": [
+      "JHG"
+    ]
+  },
+  {
+    "id": "city-jht",
+    "name": "九华山",
+    "pinyin": "jiuhuashan",
+    "cityCode": "JHT",
+    "airportCodes": [
+      "JUH"
+    ]
+  },
+  {
+    "id": "city-jiu",
+    "name": "九江",
+    "pinyin": "jiujiang",
+    "cityCode": "JIU",
+    "airportCodes": [
+      "JIU"
+    ]
+  },
+  {
+    "id": "city-jzh",
+    "name": "九寨沟",
+    "pinyin": "jiuzhaigou",
+    "cityCode": "JZH",
+    "airportCodes": [
+      "JZH"
+    ]
+  },
+  {
+    "id": "city-kji",
+    "name": "喀纳斯",
+    "pinyin": "kanasi",
+    "cityCode": "KJI",
+    "airportCodes": [
+      "KJI"
+    ]
+  },
+  {
+    "id": "city-khg",
+    "name": "喀什",
+    "pinyin": "kashi",
+    "cityCode": "KHG",
+    "airportCodes": [
+      "KHG"
+    ]
+  },
+  {
+    "id": "city-ygi",
+    "name": "凯里",
+    "pinyin": "kaili",
+    "cityCode": "YGI",
+    "airportCodes": [
+      "KJH"
+    ]
+  },
+  {
+    "id": "city-kdf",
+    "name": "康定",
+    "pinyin": "kangding",
+    "cityCode": "KDF",
+    "airportCodes": [
+      "KGT"
+    ]
+  },
+  {
+    "id": "city-kry",
+    "name": "克拉玛依",
+    "pinyin": "kelamayi",
+    "cityCode": "KRY",
+    "airportCodes": [
+      "KRY"
+    ]
+  },
+  {
+    "id": "city-kca",
+    "name": "库车",
+    "pinyin": "kuche",
+    "cityCode": "KCA",
+    "airportCodes": [
+      "KCA"
+    ]
+  },
+  {
+    "id": "city-krl",
+    "name": "库尔勒",
+    "pinyin": "kuerle",
+    "cityCode": "KRL",
+    "airportCodes": [
+      "KRL"
+    ]
+  },
+  {
+    "id": "city-kmg",
+    "name": "昆明",
+    "pinyin": "kunming",
+    "cityCode": "KMG",
+    "airportCodes": [
+      "KMG"
+    ]
+  },
+  {
+    "id": "city-lxa",
+    "name": "拉萨",
+    "pinyin": "lasa",
+    "cityCode": "LXA",
+    "airportCodes": [
+      "LXA"
+    ]
+  },
+  {
+    "id": "city-lfh",
+    "name": "兰坪",
+    "pinyin": "lanping",
+    "cityCode": "LFH",
+    "airportCodes": [
+      "LFH"
+    ]
+  },
+  {
+    "id": "city-kyd",
+    "name": "兰屿",
+    "pinyin": "lanyu",
+    "cityCode": "KYD",
+    "airportCodes": [
+      "KYD"
+    ]
+  },
+  {
+    "id": "city-lhw",
+    "name": "兰州",
+    "pinyin": "lanzhou",
+    "cityCode": "LHW",
+    "airportCodes": [
+      "LHW"
+    ]
+  },
+  {
+    "id": "city-jmj",
+    "name": "澜沧",
+    "pinyin": "lancang",
+    "cityCode": "JMJ",
+    "airportCodes": [
+      "JMJ"
+    ]
+  },
+  {
+    "id": "city-lzg",
+    "name": "阆中",
+    "pinyin": "langzhong",
+    "cityCode": "LZG",
+    "airportCodes": [
+      "LZG"
+    ]
+  },
+  {
+    "id": "city-lpr",
+    "name": "黎平",
+    "pinyin": "liping",
+    "cityCode": "LPR",
+    "airportCodes": [
+      "HZH"
+    ]
+  },
+  {
+    "id": "city-ljg",
+    "name": "丽江",
+    "pinyin": "lijiang",
+    "cityCode": "LJG",
+    "airportCodes": [
+      "LJG"
+    ]
+  },
+  {
+    "id": "city-lbc",
+    "name": "荔波",
+    "pinyin": "libo",
+    "cityCode": "LBC",
+    "airportCodes": [
+      "LLB"
+    ]
+  },
+  {
+    "id": "city-lyg",
+    "name": "连云港",
+    "pinyin": "lianyungang",
+    "cityCode": "LYG",
+    "airportCodes": [
+      "LYG"
+    ]
+  },
+  {
+    "id": "city-dhc",
+    "name": "梁河",
+    "pinyin": "lianghe",
+    "cityCode": "DHC",
+    "airportCodes": [
+      "LUM"
+    ]
+  },
+  {
+    "id": "city-lpz",
+    "name": "梁平",
+    "pinyin": "liangping",
+    "cityCode": "LPZ",
+    "airportCodes": [
+      "LIA"
+    ]
+  },
+  {
+    "id": "city-lzy",
+    "name": "林芝",
+    "pinyin": "linzhi",
+    "cityCode": "LZY",
+    "airportCodes": [
+      "LZY"
+    ]
+  },
+  {
+    "id": "city-lnj",
+    "name": "临沧",
+    "pinyin": "lincang",
+    "cityCode": "LNJ",
+    "airportCodes": [
+      "LNJ"
+    ]
+  },
+  {
+    "id": "city-lfq",
+    "name": "临汾",
+    "pinyin": "linfen",
+    "cityCode": "LFQ",
+    "airportCodes": [
+      "LFQ"
+    ]
+  },
+  {
+    "id": "city-lyi",
+    "name": "临沂",
+    "pinyin": "linyi",
+    "cityCode": "LYI",
+    "airportCodes": [
+      "LYI"
+    ]
+  },
+  {
+    "id": "city-lzh",
+    "name": "柳州",
+    "pinyin": "liuzhou",
+    "cityCode": "LZH",
+    "airportCodes": [
+      "LZH"
+    ]
+  },
+  {
+    "id": "city-lpv",
+    "name": "六盘水",
+    "pinyin": "liupanshui",
+    "cityCode": "LPV",
+    "airportCodes": [
+      "LPF"
+    ]
+  },
+  {
+    "id": "city-lcx",
+    "name": "龙岩",
+    "pinyin": "longyan",
+    "cityCode": "LCX",
+    "airportCodes": [
+      "LCX"
+    ]
+  },
+  {
+    "id": "city-log",
+    "name": "陇川",
+    "pinyin": "longchuan",
+    "cityCode": "LOG",
+    "airportCodes": [
+      "LCS"
+    ]
+  },
+  {
+    "id": "city-lnl",
+    "name": "陇南",
+    "pinyin": "longnan",
+    "cityCode": "LNL",
+    "airportCodes": [
+      "LNL"
+    ]
+  },
+  {
+    "id": "city-lzo",
+    "name": "泸州",
+    "pinyin": "luzhou",
+    "cityCode": "LZO",
+    "airportCodes": [
+      "LZO"
+    ]
+  },
+  {
+    "id": "city-llz",
+    "name": "吕梁",
+    "pinyin": "lvliang",
+    "cityCode": "LLZ",
+    "airportCodes": [
+      "LLV"
+    ]
+  },
+  {
+    "id": "city-gni",
+    "name": "绿岛",
+    "pinyin": "lvdao",
+    "cityCode": "GNI",
+    "airportCodes": [
+      "GNI"
+    ]
+  },
+  {
+    "id": "city-lya",
+    "name": "洛阳",
+    "pinyin": "luoyang",
+    "cityCode": "LYA",
+    "airportCodes": [
+      "LYA"
+    ]
+  },
+  {
+    "id": "city-mzg",
+    "name": "马公",
+    "pinyin": "magong",
+    "cityCode": "MZG",
+    "airportCodes": [
+      "MZG"
+    ]
+  },
+  {
+    "id": "city-mfk",
+    "name": "马祖",
+    "pinyin": "mazu",
+    "cityCode": "MFK",
+    "airportCodes": [
+      "MFK"
+    ]
+  },
+  {
+    "id": "city-nzh",
+    "name": "满洲里",
+    "pinyin": "manzhouli",
+    "cityCode": "NZH",
+    "airportCodes": [
+      "NZH"
+    ]
+  },
+  {
+    "id": "city-msb",
+    "name": "芒市",
+    "pinyin": "mangshi",
+    "cityCode": "MSB",
+    "airportCodes": [
+      "LUM"
+    ]
+  },
+  {
+    "id": "city-wmt",
+    "name": "茅台",
+    "pinyin": "maotai",
+    "cityCode": "WMT",
+    "airportCodes": [
+      "WMT"
+    ]
+  },
+  {
+    "id": "city-mxf",
+    "name": "梅县",
+    "pinyin": "meixian",
+    "cityCode": "MXF",
+    "airportCodes": [
+      "MXZ"
+    ]
+  },
+  {
+    "id": "city-mxz",
+    "name": "梅州",
+    "pinyin": "meizhou",
+    "cityCode": "MXZ",
+    "airportCodes": [
+      "MXZ"
+    ]
+  },
+  {
+    "id": "city-yun",
+    "name": "密云",
+    "pinyin": "miyun",
+    "cityCode": "YUN",
+    "airportCodes": [
+      "YUN"
+    ]
+  },
+  {
+    "id": "city-mig",
+    "name": "绵阳",
+    "pinyin": "mianyang",
+    "cityCode": "MIG",
+    "airportCodes": [
+      "MIG"
+    ]
+  },
+  {
+    "id": "city-ml2",
+    "name": "莫旗",
+    "pinyin": "molidawahanzizhiqi",
+    "cityCode": "ML2",
+    "airportCodes": [
+      "DWS"
+    ]
+  },
+  {
+    "id": "city-mhb",
+    "name": "漠河",
+    "pinyin": "mohe",
+    "cityCode": "MHB",
+    "airportCodes": [
+      "OHE"
+    ]
+  },
+  {
+    "id": "city-mdg",
+    "name": "牡丹江",
+    "pinyin": "mudanjiang",
+    "cityCode": "MDG",
+    "airportCodes": [
+      "MDG"
+    ]
+  },
+  {
+    "id": "city-khn",
+    "name": "南昌",
+    "pinyin": "nanchang",
+    "cityCode": "KHN",
+    "airportCodes": [
+      "KHN"
+    ]
+  },
+  {
+    "id": "city-nao",
+    "name": "南充",
+    "pinyin": "nanchong",
+    "cityCode": "NAO",
+    "airportCodes": [
+      "NAO"
+    ]
+  },
+  {
+    "id": "city-lzn",
+    "name": "南竿乡",
+    "pinyin": "nanganxiang",
+    "cityCode": "LZN",
+    "airportCodes": [
+      "LZN"
+    ]
+  },
+  {
+    "id": "city-nkg",
+    "name": "南京",
+    "pinyin": "nanjing",
+    "cityCode": "NKG",
+    "airportCodes": [
+      "NKG"
+    ]
+  },
+  {
+    "id": "city-nng",
+    "name": "南宁",
+    "pinyin": "nanning",
+    "cityCode": "NNG",
+    "airportCodes": [
+      "NNG"
+    ]
+  },
+  {
+    "id": "city-ntg",
+    "name": "南通",
+    "pinyin": "nantong",
+    "cityCode": "NTG",
+    "airportCodes": [
+      "NTG"
+    ]
+  },
+  {
+    "id": "city-nny",
+    "name": "南阳",
+    "pinyin": "nanyang",
+    "cityCode": "NNY",
+    "airportCodes": [
+      "NNY"
+    ]
+  },
+  {
+    "id": "city-njj",
+    "name": "嫩江",
+    "pinyin": "nenjiang",
+    "cityCode": "NJJ",
+    "airportCodes": [
+      "NJJ"
+    ]
+  },
+  {
+    "id": "city-ngb",
+    "name": "宁波",
+    "pinyin": "ningbo",
+    "cityCode": "NGB",
+    "airportCodes": [
+      "NGB"
+    ]
+  },
+  {
+    "id": "city-nlh",
+    "name": "宁蒗",
+    "pinyin": "ninglang",
+    "cityCode": "NLH",
+    "airportCodes": [
+      "NLH"
+    ]
+  },
+  {
+    "id": "city-pzi",
+    "name": "攀枝花",
+    "pinyin": "panzhihua",
+    "cityCode": "PZI",
+    "airportCodes": [
+      "PZI"
+    ]
+  },
+  {
+    "id": "city-prf",
+    "name": "普洱",
+    "pinyin": "puer",
+    "cityCode": "PRF",
+    "airportCodes": [
+      "SYM"
+    ]
+  },
+  {
+    "id": "city-cmj",
+    "name": "七美",
+    "pinyin": "qimei",
+    "cityCode": "CMJ",
+    "airportCodes": [
+      "CMJ"
+    ]
+  },
+  {
+    "id": "city-hbb",
+    "name": "祁连",
+    "pinyin": "qilian",
+    "cityCode": "HBB",
+    "airportCodes": [
+      "HBQ"
+    ]
+  },
+  {
+    "id": "city-ndg",
+    "name": "齐齐哈尔",
+    "pinyin": "qiqihaer",
+    "cityCode": "NDG",
+    "airportCodes": [
+      "NDG"
+    ]
+  },
+  {
+    "id": "city-qjx",
+    "name": "黔江",
+    "pinyin": "qianjiang",
+    "cityCode": "QJX",
+    "airportCodes": [
+      "JIQ"
+    ]
+  },
+  {
+    "id": "city-iqm",
+    "name": "且末",
+    "pinyin": "qiemo",
+    "cityCode": "IQM",
+    "airportCodes": [
+      "IQM"
+    ]
+  },
+  {
+    "id": "city-bpe",
+    "name": "秦皇岛",
+    "pinyin": "qinhuangdao",
+    "cityCode": "BPE",
+    "airportCodes": [
+      "BPE"
+    ]
+  },
+  {
+    "id": "city-tao",
+    "name": "青岛",
+    "pinyin": "qingdao",
+    "cityCode": "TAO",
+    "airportCodes": [
+      "TAO"
+    ]
+  },
+  {
+    "id": "city-iqn",
+    "name": "庆阳",
+    "pinyin": "qingyang",
+    "cityCode": "IQN",
+    "airportCodes": [
+      "IQN"
+    ]
+  },
+  {
+    "id": "city-bar",
+    "name": "琼海",
+    "pinyin": "qionghai",
+    "cityCode": "BAR",
+    "airportCodes": [
+      "BAR"
+    ]
+  },
+  {
+    "id": "city-juz",
+    "name": "衢州",
+    "pinyin": "quzhou",
+    "cityCode": "JUZ",
+    "airportCodes": [
+      "JUZ"
+    ]
+  },
+  {
+    "id": "city-jjn",
+    "name": "泉州",
+    "pinyin": "quanzhou",
+    "cityCode": "JJN",
+    "airportCodes": [
+      "JJN"
+    ]
+  },
+  {
+    "id": "city-rik",
+    "name": "日喀则",
+    "pinyin": "rikaze",
+    "cityCode": "RIK",
+    "airportCodes": [
+      "RKZ"
+    ]
+  },
+  {
+    "id": "city-riz",
+    "name": "日照",
+    "pinyin": "rizhao ",
+    "cityCode": "RIZ",
+    "airportCodes": [
+      "RIZ"
+    ]
+  },
+  {
+    "id": "city-rqa",
+    "name": "若羌",
+    "pinyin": "ruoqiang",
+    "cityCode": "RQA",
+    "airportCodes": [
+      "RQA"
+    ]
+  },
+  {
+    "id": "city-sqj",
+    "name": "三明",
+    "pinyin": "sanming",
+    "cityCode": "SQJ",
+    "airportCodes": [
+      "SQJ"
+    ]
+  },
+  {
+    "id": "city-syx",
+    "name": "三亚",
+    "pinyin": "sanya",
+    "cityCode": "SYX",
+    "airportCodes": [
+      "SYX"
+    ]
+  },
+  {
+    "id": "city-qsz",
+    "name": "莎车",
+    "pinyin": "shache",
+    "cityCode": "QSZ",
+    "airportCodes": [
+      "QSZ"
+    ]
+  },
+  {
+    "id": "city-xmn",
+    "name": "厦门",
+    "pinyin": "xiamen",
+    "cityCode": "XMN",
+    "airportCodes": [
+      "XMN"
+    ]
+  },
+  {
+    "id": "city-lgz",
+    "name": "山南隆子",
+    "pinyin": "snlzx",
+    "cityCode": "LGZ",
+    "airportCodes": [
+      "LGZ"
+    ]
+  },
+  {
+    "id": "city-stn",
+    "name": "汕头",
+    "pinyin": "shantou",
+    "cityCode": "STN",
+    "airportCodes": [
+      "SWA"
+    ]
+  },
+  {
+    "id": "city-sxj",
+    "name": "鄯善",
+    "pinyin": "shanshan",
+    "cityCode": "SXJ",
+    "airportCodes": [
+      "SXJ"
+    ]
+  },
+  {
+    "id": "city-sha",
+    "name": "上海",
+    "pinyin": "shanghai",
+    "cityCode": "SHA",
+    "airportCodes": [
+      "SHA",
+      "PVG"
+    ]
+  },
+  {
+    "id": "city-sqd",
+    "name": "上饶",
+    "pinyin": "shangrao",
+    "cityCode": "SQD",
+    "airportCodes": [
+      "SQD"
+    ]
+  },
+  {
+    "id": "city-hsc",
+    "name": "韶关",
+    "pinyin": "shaoguan",
+    "cityCode": "HSC",
+    "airportCodes": [
+      "HSC"
+    ]
+  },
+  {
+    "id": "city-wgn",
+    "name": "邵阳",
+    "pinyin": "shaoyang",
+    "cityCode": "WGN",
+    "airportCodes": [
+      "WGN"
+    ]
+  },
+  {
+    "id": "city-szx",
+    "name": "深圳",
+    "pinyin": "shenzhen",
+    "cityCode": "SZX",
+    "airportCodes": [
+      "SZX"
+    ]
+  },
+  {
+    "id": "city-hpg",
+    "name": "神农架",
+    "pinyin": "shennongjia",
+    "cityCode": "HPG",
+    "airportCodes": [
+      "HPG"
+    ]
+  },
+  {
+    "id": "city-she",
+    "name": "沈阳",
+    "pinyin": "shenyang",
+    "cityCode": "SHE",
+    "airportCodes": [
+      "SHE"
+    ]
+  },
+  {
+    "id": "city-ssu",
+    "name": "嵊泗",
+    "pinyin": "shengsi",
+    "cityCode": "SSU",
+    "airportCodes": [
+      "SSU"
+    ]
+  },
+  {
+    "id": "city-wds",
+    "name": "十堰",
+    "pinyin": "shiyan",
+    "cityCode": "WDS",
+    "airportCodes": [
+      "WDS"
+    ]
+  },
+  {
+    "id": "city-shf",
+    "name": "石河子",
+    "pinyin": "shihezi",
+    "cityCode": "SHF",
+    "airportCodes": [
+      "SHF"
+    ]
+  },
+  {
+    "id": "city-sjw",
+    "name": "石家庄",
+    "pinyin": "shijiazhuang",
+    "cityCode": "SJW",
+    "airportCodes": [
+      "SJW",
+      "LCT"
+    ]
+  },
+  {
+    "id": "city-szh",
+    "name": "朔州",
+    "pinyin": "shuozhou",
+    "cityCode": "SZH",
+    "airportCodes": [
+      "SZH"
+    ]
+  },
+  {
+    "id": "city-syq",
+    "name": "思茅",
+    "pinyin": "simao",
+    "cityCode": "SYQ",
+    "airportCodes": [
+      "SYM"
+    ]
+  },
+  {
+    "id": "city-syg",
+    "name": "松原",
+    "pinyin": "songyuan",
+    "cityCode": "SYG",
+    "airportCodes": [
+      "YSQ"
+    ]
+  },
+  {
+    "id": "city-tcg",
+    "name": "塔城",
+    "pinyin": "tacheng",
+    "cityCode": "TCG",
+    "airportCodes": [
+      "TCG"
+    ]
+  },
+  {
+    "id": "city-hql",
+    "name": "塔什库尔干",
+    "pinyin": "tashikuergan",
+    "cityCode": "HQL",
+    "airportCodes": [
+      "HQL"
+    ]
+  },
+  {
+    "id": "city-tpe",
+    "name": "台北",
+    "pinyin": "taibei",
+    "cityCode": "TPE",
+    "airportCodes": [
+      "TPE,TSA"
+    ]
+  },
+  {
+    "id": "city-ttt",
+    "name": "台东",
+    "pinyin": "taidong",
+    "cityCode": "TTT",
+    "airportCodes": [
+      "TTT"
+    ]
+  },
+  {
+    "id": "city-tnn",
+    "name": "台南",
+    "pinyin": "tainan",
+    "cityCode": "TNN",
+    "airportCodes": [
+      "TNN"
+    ]
+  },
+  {
+    "id": "city-rmq",
+    "name": "台中",
+    "pinyin": "taizhong",
+    "cityCode": "RMQ",
+    "airportCodes": [
+      "RMQ"
+    ]
+  },
+  {
+    "id": "city-hyn",
+    "name": "台州",
+    "pinyin": "taizhou",
+    "cityCode": "HYN",
+    "airportCodes": [
+      "HYN"
+    ]
+  },
+  {
+    "id": "city-tyn",
+    "name": "太原",
+    "pinyin": "taiyuan",
+    "cityCode": "TYN",
+    "airportCodes": [
+      "TYC",
+      "TYN"
+    ]
+  },
+  {
+    "id": "city-tzu",
+    "name": "泰州",
+    "pinyin": "taizhou",
+    "cityCode": "TZU",
+    "airportCodes": [
+      "YTY"
+    ]
+  },
+  {
+    "id": "city-tvs",
+    "name": "唐山",
+    "pinyin": "tangshan",
+    "cityCode": "TVS",
+    "airportCodes": [
+      "TVS"
+    ]
+  },
+  {
+    "id": "city-tcz",
+    "name": "腾冲",
+    "pinyin": "tengchong",
+    "cityCode": "TCZ",
+    "airportCodes": [
+      "TCZ"
+    ]
+  },
+  {
+    "id": "city-tsn",
+    "name": "天津",
+    "pinyin": "tianjin",
+    "cityCode": "TSN",
+    "airportCodes": [
+      "TSN"
+    ]
+  },
+  {
+    "id": "city-thq",
+    "name": "天水",
+    "pinyin": "tianshui",
+    "cityCode": "THQ",
+    "airportCodes": [
+      "THQ"
+    ]
+  },
+  {
+    "id": "city-tnh",
+    "name": "通化",
+    "pinyin": "tonghua",
+    "cityCode": "TNH",
+    "airportCodes": [
+      "TNH"
+    ]
+  },
+  {
+    "id": "city-tgo",
+    "name": "通辽",
+    "pinyin": "huolinguole",
+    "cityCode": "TGO",
+    "airportCodes": [
+      "TGO"
+    ]
+  },
+  {
+    "id": "city-ten",
+    "name": "铜仁",
+    "pinyin": "tongren",
+    "cityCode": "TEN",
+    "airportCodes": [
+      "TEN"
+    ]
+  },
+  {
+    "id": "city-tq1",
+    "name": "突泉",
+    "pinyin": "tuquan",
+    "cityCode": "TQ1",
+    "airportCodes": [
+      "TQ1"
+    ]
+  },
+  {
+    "id": "city-twc",
+    "name": "图木舒克",
+    "pinyin": "tumushuke",
+    "cityCode": "TWC",
+    "airportCodes": [
+      "TWC"
+    ]
+  },
+  {
+    "id": "city-tlq",
+    "name": "吐鲁番",
+    "pinyin": "tulufan",
+    "cityCode": "TLQ",
+    "airportCodes": [
+      "TLQ"
+    ]
+  },
+  {
+    "id": "city-wzz",
+    "name": "万州",
+    "pinyin": "wanzhou",
+    "cityCode": "WZZ",
+    "airportCodes": [
+      "WXN"
+    ]
+  },
+  {
+    "id": "city-wot",
+    "name": "望安",
+    "pinyin": "wangan",
+    "cityCode": "WOT",
+    "airportCodes": [
+      "WOT"
+    ]
+  },
+  {
+    "id": "city-weh",
+    "name": "威海",
+    "pinyin": "weihai",
+    "cityCode": "WEH",
+    "airportCodes": [
+      "WEH"
+    ]
+  },
+  {
+    "id": "city-ydk",
+    "name": "围场",
+    "pinyin": "wei chang man zu meng gu zu zi zhi xian",
+    "cityCode": "YDK",
+    "airportCodes": [
+      "YDK"
+    ]
+  },
+  {
+    "id": "city-wef",
+    "name": "潍坊",
+    "pinyin": "weifang",
+    "cityCode": "WEF",
+    "airportCodes": [
+      "WEF"
+    ]
+  },
+  {
+    "id": "city-wnz",
+    "name": "温州",
+    "pinyin": "wenzhou",
+    "cityCode": "WNZ",
+    "airportCodes": [
+      "WNZ"
+    ]
+  },
+  {
+    "id": "city-wnh",
+    "name": "文山",
+    "pinyin": "wenshan",
+    "cityCode": "WNH",
+    "airportCodes": [
+      "WNH"
+    ]
+  },
+  {
+    "id": "city-wrh",
+    "name": "乌尔禾",
+    "pinyin": "wuerhe",
+    "cityCode": "WRH",
+    "airportCodes": [
+      "WRH"
+    ]
+  },
+  {
+    "id": "city-wua",
+    "name": "乌海",
+    "pinyin": "wuhai",
+    "cityCode": "WUA",
+    "airportCodes": [
+      "WUA"
+    ]
+  },
+  {
+    "id": "city-wzq",
+    "name": "乌拉特中旗",
+    "pinyin": "wulatezhongqi",
+    "cityCode": "WZQ",
+    "airportCodes": [
+      "WZQ"
+    ]
+  },
+  {
+    "id": "city-ucb",
+    "name": "乌兰察布",
+    "pinyin": "wulanchabu",
+    "cityCode": "UCB",
+    "airportCodes": [
+      "UCB"
+    ]
+  },
+  {
+    "id": "city-wlt",
+    "name": "乌兰浩特",
+    "pinyin": "wulanhaote",
+    "cityCode": "WLT",
+    "airportCodes": [
+      "HLH"
+    ]
+  },
+  {
+    "id": "city-urc",
+    "name": "乌鲁木齐",
+    "pinyin": "wulumuqi",
+    "cityCode": "URC",
+    "airportCodes": [
+      "URC"
+    ]
+  },
+  {
+    "id": "city-wsq",
+    "name": "乌审旗",
+    "pinyin": "wushenqi",
+    "cityCode": "WSQ",
+    "airportCodes": [
+      "WSQ"
+    ]
+  },
+  {
+    "id": "city-wsk",
+    "name": "巫山",
+    "pinyin": "wushan",
+    "cityCode": "WSK",
+    "airportCodes": [
+      "WSK"
+    ]
+  },
+  {
+    "id": "city-wux",
+    "name": "无锡",
+    "pinyin": "wuxi",
+    "cityCode": "WUX",
+    "airportCodes": [
+      "WUX"
+    ]
+  },
+  {
+    "id": "city-whu",
+    "name": "芜湖",
+    "pinyin": "wuhu",
+    "cityCode": "WHU",
+    "airportCodes": [
+      "WHA"
+    ]
+  },
+  {
+    "id": "city-wuz",
+    "name": "梧州",
+    "pinyin": "wuzhou",
+    "cityCode": "WUZ",
+    "airportCodes": [
+      "WUZ"
+    ]
+  },
+  {
+    "id": "city-wdl",
+    "name": "五大连池",
+    "pinyin": "wudalianchi",
+    "cityCode": "WDL",
+    "airportCodes": [
+      "DTU"
+    ]
+  },
+  {
+    "id": "city-wuh",
+    "name": "武汉",
+    "pinyin": "wuhan",
+    "cityCode": "WUH",
+    "airportCodes": [
+      "WUH"
+    ]
+  },
+  {
+    "id": "city-cqw",
+    "name": "武隆",
+    "pinyin": "chongqing wulong",
+    "cityCode": "CQW",
+    "airportCodes": [
+      "CQW"
+    ]
+  },
+  {
+    "id": "city-wus",
+    "name": "武夷山",
+    "pinyin": "wuyishan",
+    "cityCode": "WUS",
+    "airportCodes": [
+      "WUS"
+    ]
+  },
+  {
+    "id": "city-sia",
+    "name": "西安",
+    "pinyin": "xian",
+    "cityCode": "SIA",
+    "airportCodes": [
+      "XIY"
+    ]
+  },
+  {
+    "id": "city-xic",
+    "name": "西昌",
+    "pinyin": "xichang",
+    "cityCode": "XIC",
+    "airportCodes": [
+      "XIC"
+    ]
+  },
+  {
+    "id": "city-xnn",
+    "name": "西宁",
+    "pinyin": "xining",
+    "cityCode": "XNN",
+    "airportCodes": [
+      "XNN"
+    ]
+  },
+  {
+    "id": "city-jhg",
+    "name": "西双版纳",
+    "pinyin": "xishuangbanna",
+    "cityCode": "JHG",
+    "airportCodes": [
+      "JHG"
+    ]
+  },
+  {
+    "id": "city-xil",
+    "name": "锡林浩特",
+    "pinyin": "xilinhaote",
+    "cityCode": "XIL",
+    "airportCodes": [
+      "XIL"
+    ]
+  },
+  {
+    "id": "city-xhs",
+    "name": "夏河",
+    "pinyin": "xiahe",
+    "cityCode": "XHS",
+    "airportCodes": [
+      "GXH"
+    ]
+  },
+  {
+    "id": "city-xib",
+    "name": "咸阳",
+    "pinyin": "xianyang",
+    "cityCode": "XIB",
+    "airportCodes": [
+      "XIY"
+    ]
+  },
+  {
+    "id": "city-hkg",
+    "name": "香港",
+    "pinyin": "xianggang",
+    "cityCode": "HKG",
+    "airportCodes": [
+      "HKG"
+    ]
+  },
+  {
+    "id": "city-dxj",
+    "name": "湘西",
+    "pinyin": "xiangxi",
+    "cityCode": "DXJ",
+    "airportCodes": [
+      "DXJ"
+    ]
+  },
+  {
+    "id": "city-xfn",
+    "name": "襄阳",
+    "pinyin": "xiangyang",
+    "cityCode": "XFN",
+    "airportCodes": [
+      "XFN"
+    ]
+  },
+  {
+    "id": "city-xhq",
+    "name": "镶黄旗",
+    "pinyin": "xianghuangqi",
+    "cityCode": "XHQ",
+    "airportCodes": [
+      "XHQ"
+    ]
+  },
+  {
+    "id": "city-wut",
+    "name": "忻州",
+    "pinyin": "xinzhou",
+    "cityCode": "WUT",
+    "airportCodes": [
+      "WUT"
+    ]
+  },
+  {
+    "id": "city-xrq",
+    "name": "新巴尔虎右旗",
+    "pinyin": "xinbaerhuyouqi",
+    "cityCode": "XRQ",
+    "airportCodes": [
+      "XRQ"
+    ]
+  },
+  {
+    "id": "city-xys",
+    "name": "新源",
+    "pinyin": "xinyuan",
+    "cityCode": "XYS",
+    "airportCodes": [
+      "NLT"
+    ]
+  },
+  {
+    "id": "city-hsz",
+    "name": "新竹",
+    "pinyin": "xinzhu",
+    "cityCode": "HSZ",
+    "airportCodes": [
+      "HSZ"
+    ]
+  },
+  {
+    "id": "city-xai",
+    "name": "信阳",
+    "pinyin": "xinyang",
+    "cityCode": "XAI",
+    "airportCodes": [
+      "XAI"
+    ]
+  },
+  {
+    "id": "city-xnt",
+    "name": "邢台",
+    "pinyin": "xingtai",
+    "cityCode": "XNT",
+    "airportCodes": [
+      "XNT"
+    ]
+  },
+  {
+    "id": "city-xam",
+    "name": "兴安盟",
+    "pinyin": "xinganmeng",
+    "cityCode": "XAM",
+    "airportCodes": [
+      "ZL1"
+    ]
+  },
+  {
+    "id": "city-acx",
+    "name": "兴义",
+    "pinyin": "xingyi",
+    "cityCode": "ACX",
+    "airportCodes": [
+      "ACX"
+    ]
+  },
+  {
+    "id": "city-xuz",
+    "name": "徐州",
+    "pinyin": "xuzhou",
+    "cityCode": "XUZ",
+    "airportCodes": [
+      "XNY",
+      "XUZ"
+    ]
+  },
+  {
+    "id": "city-ynt",
+    "name": "烟台",
+    "pinyin": "yantai",
+    "cityCode": "YNT",
+    "airportCodes": [
+      "YNT"
+    ]
+  },
+  {
+    "id": "city-eny",
+    "name": "延安",
+    "pinyin": "yanan",
+    "cityCode": "ENY",
+    "airportCodes": [
+      "ENY"
+    ]
+  },
+  {
+    "id": "city-ynj",
+    "name": "延吉",
+    "pinyin": "yanji",
+    "cityCode": "YNJ",
+    "airportCodes": [
+      "YNJ"
+    ]
+  },
+  {
+    "id": "city-ynz",
+    "name": "盐城",
+    "pinyin": "yancheng",
+    "cityCode": "YNZ",
+    "airportCodes": [
+      "YNZ"
+    ]
+  },
+  {
+    "id": "city-yty",
+    "name": "扬州",
+    "pinyin": "yangzhou",
+    "cityCode": "YTY",
+    "airportCodes": [
+      "YTY"
+    ]
+  },
+  {
+    "id": "city-yjj",
+    "name": "阳江",
+    "pinyin": "yangjiang",
+    "cityCode": "YJJ",
+    "airportCodes": [
+      "YJR"
+    ]
+  },
+  {
+    "id": "city-lds",
+    "name": "伊春",
+    "pinyin": "yichun",
+    "cityCode": "LDS",
+    "airportCodes": [
+      "LDS"
+    ]
+  },
+  {
+    "id": "city-yil",
+    "name": "伊犁",
+    "pinyin": "yili",
+    "cityCode": "YIL",
+    "airportCodes": [
+      "ZFL",
+      "YIN"
+    ]
+  },
+  {
+    "id": "city-yin",
+    "name": "伊宁",
+    "pinyin": "yining",
+    "cityCode": "YIN",
+    "airportCodes": [
+      "YIN"
+    ]
+  },
+  {
+    "id": "city-ybp",
+    "name": "宜宾",
+    "pinyin": "yibin",
+    "cityCode": "YBP",
+    "airportCodes": [
+      "YBP"
+    ]
+  },
+  {
+    "id": "city-yih",
+    "name": "宜昌",
+    "pinyin": "yichang",
+    "cityCode": "YIH",
+    "airportCodes": [
+      "YIH"
+    ]
+  },
+  {
+    "id": "city-yic",
+    "name": "宜春",
+    "pinyin": "yichun",
+    "cityCode": "YIC",
+    "airportCodes": [
+      "YIC"
+    ]
+  },
+  {
+    "id": "city-yiw",
+    "name": "义乌",
+    "pinyin": "yiwu",
+    "cityCode": "YIW",
+    "airportCodes": [
+      "YIW"
+    ]
+  },
+  {
+    "id": "city-inc",
+    "name": "银川",
+    "pinyin": "yinchuan",
+    "cityCode": "INC",
+    "airportCodes": [
+      "INC"
+    ]
+  },
+  {
+    "id": "city-ykh",
+    "name": "营口",
+    "pinyin": "yingkou",
+    "cityCode": "YKH",
+    "airportCodes": [
+      "YKH"
+    ]
+  },
+  {
+    "id": "city-yga",
+    "name": "永川",
+    "pinyin": "yongchun",
+    "cityCode": "YGA",
+    "airportCodes": [
+      "YGA"
+    ]
+  },
+  {
+    "id": "city-llf",
+    "name": "永州",
+    "pinyin": "yongzhou",
+    "cityCode": "LLF",
+    "airportCodes": [
+      "LLF"
+    ]
+  },
+  {
+    "id": "city-ytw",
+    "name": "于田县",
+    "pinyin": "yutian",
+    "cityCode": "YTW",
+    "airportCodes": [
+      "YTW"
+    ]
+  },
+  {
+    "id": "city-uyn",
+    "name": "榆林",
+    "pinyin": "yulinshi",
+    "cityCode": "UYN",
+    "airportCodes": [
+      "UYN"
+    ]
+  },
+  {
+    "id": "city-ylu",
+    "name": "玉林",
+    "pinyin": "yulin",
+    "cityCode": "YLU",
+    "airportCodes": [
+      "YLX"
+    ]
+  },
+  {
+    "id": "city-yus",
+    "name": "玉树",
+    "pinyin": "yushu",
+    "cityCode": "YUS",
+    "airportCodes": [
+      "YUS"
+    ]
+  },
+  {
+    "id": "city-yya",
+    "name": "岳阳",
+    "pinyin": "yueyang",
+    "cityCode": "YYA",
+    "airportCodes": [
+      "YYA"
+    ]
+  },
+  {
+    "id": "city-ycu",
+    "name": "运城",
+    "pinyin": "yuncheng",
+    "cityCode": "YCU",
+    "airportCodes": [
+      "YCU"
+    ]
+  },
+  {
+    "id": "city-zhl",
+    "name": "扎兰屯",
+    "pinyin": "zhalantun",
+    "cityCode": "ZHL",
+    "airportCodes": [
+      "NZL"
+    ]
+  },
+  {
+    "id": "city-zha",
+    "name": "湛江",
+    "pinyin": "zhanjiang",
+    "cityCode": "ZHA",
+    "airportCodes": [
+      "ZHA"
+    ]
+  },
+  {
+    "id": "city-dyg",
+    "name": "张家界",
+    "pinyin": "zhangjiajie",
+    "cityCode": "DYG",
+    "airportCodes": [
+      "DYG"
+    ]
+  },
+  {
+    "id": "city-zqz",
+    "name": "张家口",
+    "pinyin": "zhangjiakou",
+    "cityCode": "ZQZ",
+    "airportCodes": [
+      "ZQZ"
+    ]
+  },
+  {
+    "id": "city-yzy",
+    "name": "张掖",
+    "pinyin": "zhangye",
+    "cityCode": "YZY",
+    "airportCodes": [
+      "YZY"
+    ]
+  },
+  {
+    "id": "city-cgq",
+    "name": "长春",
+    "pinyin": "changchun",
+    "cityCode": "CGQ",
+    "airportCodes": [
+      "CGQ"
+    ]
+  },
+  {
+    "id": "city-cni",
+    "name": "长海",
+    "pinyin": "changhai",
+    "cityCode": "CNI",
+    "airportCodes": [
+      "CNI"
+    ]
+  },
+  {
+    "id": "city-csx",
+    "name": "长沙",
+    "pinyin": "changsha",
+    "cityCode": "CSX",
+    "airportCodes": [
+      "CSX"
+    ]
+  },
+  {
+    "id": "city-cih",
+    "name": "长治",
+    "pinyin": "changzhi",
+    "cityCode": "CIH",
+    "airportCodes": [
+      "CIH"
+    ]
+  },
+  {
+    "id": "city-zfl",
+    "name": "昭苏",
+    "pinyin": "zhaosu",
+    "cityCode": "ZFL",
+    "airportCodes": [
+      "ZFL"
+    ]
+  },
+  {
+    "id": "city-zat",
+    "name": "昭通",
+    "pinyin": "zhaotong",
+    "cityCode": "ZAT",
+    "airportCodes": [
+      "ZAT"
+    ]
+  },
+  {
+    "id": "city-zuj",
+    "name": "镇江",
+    "pinyin": "zhenjiang",
+    "cityCode": "ZUJ",
+    "airportCodes": [
+      "AZJ"
+    ]
+  },
+  {
+    "id": "city-cgo",
+    "name": "郑州",
+    "pinyin": "zhengzhou",
+    "cityCode": "CGO",
+    "airportCodes": [
+      "CGO"
+    ]
+  },
+  {
+    "id": "city-zjx",
+    "name": "芷江",
+    "pinyin": "zhijiang",
+    "cityCode": "ZJX",
+    "airportCodes": [
+      "HJJ"
+    ]
+  },
+  {
+    "id": "city-zhy",
+    "name": "中卫",
+    "pinyin": "zhongwei",
+    "cityCode": "ZHY",
+    "airportCodes": [
+      "ZHY"
+    ]
+  },
+  {
+    "id": "city-hsn",
+    "name": "舟山",
+    "pinyin": "zhoushan",
+    "cityCode": "HSN",
+    "airportCodes": [
+      "HSN"
+    ]
+  },
+  {
+    "id": "city-zuh",
+    "name": "珠海",
+    "pinyin": "zhuhai",
+    "cityCode": "ZUH",
+    "airportCodes": [
+      "ZUH",
+      "LZL"
+    ]
+  },
+  {
+    "id": "city-zyi",
+    "name": "遵义",
+    "pinyin": "zunyi",
+    "cityCode": "ZYI",
+    "airportCodes": [
+      "ZYI"
+    ]
+  }
+]

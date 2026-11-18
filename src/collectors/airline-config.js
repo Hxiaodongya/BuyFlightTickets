@@ -1,8 +1,8 @@
 export const airlineAdapters = Object.freeze({
   CA: Object.freeze({
-    buildSearchUrl({ plan, travelDate }) {
-      const route = `${plan.originCode.toLowerCase()}-${plan.destinationCode.toLowerCase()}`;
-      return `https://www.airchina.com.cn/flight/oneway/${route}/${travelDate}`;
+    pushResult: true,
+    buildSearchUrl() {
+      return "https://m.airchina.com.cn/ac/c/invoke/qryFlights_activity%40pg";
     },
   }),
   CZ: Object.freeze({

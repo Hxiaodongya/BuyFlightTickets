@@ -4,21 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>航班价格追踪</title>
-    <link rel="stylesheet" href="popup.css">
   </head>
   <body>
-    <header class="header">
-      <h1>航班价格追踪</h1>
-      <button id="open-dashboard" class="quiet-button" type="button">价格历史</button>
-    </header>
-    <main>
-      <p id="today-status" class="status" role="status" aria-live="polite">读取中</p>
-      <p id="run-time" class="run-time"></p>
-      <p id="run-counts" class="run-counts"></p>
-      <button id="collect-now" class="primary-button" type="button">立即采集</button>
-      <p class="fare-note">列表价（未含税费）</p>
-      <p id="error-message" class="error" role="alert"></p>
-    </main>
-    <script type="module" src="popup.js"></script>
+    <div id="app"></div>
+    <script type="module" src="main.js"></script>
   </body>
 </html>

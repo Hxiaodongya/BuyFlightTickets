@@ -145,7 +145,12 @@ export function createCollector({
       throw new Error(`No collector is available for ${task.airlineCode}`);
     }
 
-    const travelPlan = { ...plan, travelDates: [task.travelDate] };
+    const travelPlan = {
+      ...plan,
+      travelDates: [task.travelDate],
+      adultCount: 1,
+      cabin: "economy",
+    };
     const url = adapter.buildSearchUrl({ plan: travelPlan, travelDate: task.travelDate });
     if (typeof url !== "string" || !url.startsWith("https://")) {
       throw new Error("Airline adapter returned an invalid HTTPS URL");

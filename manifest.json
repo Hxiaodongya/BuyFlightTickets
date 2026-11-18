@@ -5,7 +5,7 @@
   "description": "在本地记录国航和南航公开航班列表价变化。",
   "permissions": ["alarms", "storage"],
   "host_permissions": [
-    "https://www.airchina.com.cn/*",
+    "https://m.airchina.com.cn/*",
     "https://b2c.csair.com/*"
   ],
   "background": {
@@ -18,13 +18,21 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.airchina.com.cn/*"],
-      "js": ["src/collectors/price-parser.js", "src/collectors/airchina.js"],
+      "matches": ["https://m.airchina.com.cn/*"],
+      "js": [
+        "src/collectors/price-parser.js",
+        "src/collectors/city-form.js",
+        "src/collectors/airchina.js"
+      ],
       "run_at": "document_idle"
     },
     {
       "matches": ["https://b2c.csair.com/*"],
-      "js": ["src/collectors/price-parser.js", "src/collectors/csair.js"],
+      "js": [
+        "src/collectors/price-parser.js",
+        "src/collectors/city-form.js",
+        "src/collectors/csair.js"
+      ],
       "run_at": "document_idle"
     }
   ]

@@ -1,7 +1,9 @@
 (function installAirChinaCollector() {
   const parser = globalThis.FlightPriceParser;
+  const cityForm = globalThis.FlightCityForm;
+  const pendingSearchKey = "__flight_price_tracker_airchina_pending_search__";
 
-  function waitForResults(timeoutMs = 20_000) {
+  function waitForResults(timeoutMs = 25_000) {
     return new Promise((resolve, reject) => {
       const deadline = Date.now() + timeoutMs;
       let observer;
@@ -44,9 +46,82 @@
     });
   }
 
+  async function pushResult(request, rows, error = null) {
+    try {
+      await chrome.runtime.sendMessage({
+        type: "COLLECTION_RESULT_PUSH",
+        requestId: request.requestId,
+        airlineCode: "CA",
+        rows: rows.map((row) => ({ ...row, sourceUrl: location.href })),
+        ...(error ? { error: error.message } : {}),
+      });
+    } finally {
+      try {
+        const pending = JSON.parse(sessionStorage.getItem(pendingSearchKey) ?? "null");
+        if (pending?.requestId === request.requestId) {
+          sessionStorage.removeItem(pendingSearchKey);
+        }
+      } catch {
+        sessionStorage.removeItem(pendingSearchKey);
+      }
+    }
+  }
+
+  function continuePendingSearch(request) {
+    void waitForResults()
+      .then((rows) => pushResult(request, rows))
+      .catch((error) => pushResult(request, [], error));
+  }
+
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request?.type !== "GET_COLLECTION_REQUEST" || request.airlineCode !== "CA") {
       return false;
+    }
+
+    const pageError = parser.detectPageError(document.body?.innerText);
+    if (pageError) {
+      sendResponse({
+        type: "COLLECTION_RESULT",
+        requestId: request.requestId,
+        airlineCode: "CA",
+        rows: [],
+        error: pageError,
+      });
+      return false;
+    }
+
+    if (parser.collectVisibleRows(document, "CA").length === 0) {
+      if (!cityForm) {
+        sendResponse({
+          type: "COLLECTION_RESULT",
+          requestId: request.requestId,
+          airlineCode: "CA",
+          rows: [],
+          error: "国航城市查询组件不可用，未提交搜索",
+        });
+        return false;
+      }
+      cityForm.prepareSearch(request, "国航")
+        .then((searchButton) => {
+          sessionStorage.setItem(pendingSearchKey, JSON.stringify(request));
+          sendResponse({
+            type: "COLLECTION_PENDING",
+            requestId: request.requestId,
+            airlineCode: "CA",
+          });
+          searchButton.click();
+          continuePendingSearch(request);
+        })
+        .catch((error) => {
+          sendResponse({
+            type: "COLLECTION_RESULT",
+            requestId: request.requestId,
+            airlineCode: "CA",
+            rows: [],
+            error: error.message,
+          });
+        });
+      return true;
     }
 
     waitForResults()
@@ -69,4 +144,13 @@
       );
     return true;
   });
+
+  try {
+    const pendingRequest = JSON.parse(sessionStorage.getItem(pendingSearchKey) ?? "null");
+    if (pendingRequest?.type === "GET_COLLECTION_REQUEST" && pendingRequest.airlineCode === "CA") {
+      continuePendingSearch(pendingRequest);
+    }
+  } catch {
+    sessionStorage.removeItem(pendingSearchKey);
+  }
 })();

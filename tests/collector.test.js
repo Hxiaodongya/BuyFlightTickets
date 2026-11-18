@@ -5,22 +5,22 @@ import { createCollector } from "../src/background/collector.js";
 const plans = [
   {
     id: "plan-1",
-    originCode: "HGH",
-    destinationCode: "CGQ",
+    originCityId: "city-hgh",
+    originCityName: "杭州",
+    destinationCityId: "city-cgq",
+    destinationCityName: "长春",
     travelDates: ["2027-02-04", "2027-02-05"],
     airlineCodes: ["CA", "CZ"],
-    adultCount: 1,
-    cabin: "economy",
     enabled: true,
   },
   {
     id: "disabled-plan",
-    originCode: "HGH",
-    destinationCode: "PEK",
+    originCityId: "city-hgh",
+    originCityName: "杭州",
+    destinationCityId: "city-pek",
+    destinationCityName: "北京",
     travelDates: ["2027-02-04"],
     airlineCodes: ["CA"],
-    adultCount: 1,
-    cabin: "economy",
     enabled: false,
   },
 ];
@@ -56,16 +56,19 @@ function createTabsApi({ sendMessage } = {}) {
   let nextTabId = 1;
   const created = [];
   const removed = [];
+  const sentMessages = [];
 
   return {
     created,
     removed,
+    sentMessages,
     async create(options) {
       const tab = { id: nextTabId++, status: "complete", ...options };
       created.push(tab);
       return tab;
     },
     async sendMessage(tabId, message) {
+      sentMessages.push(structuredClone(message));
       if (sendMessage) {
         return sendMessage(tabId, message);
       }
@@ -129,6 +132,18 @@ test("runs enabled plan, airline, and date jobs sequentially in inactive tabs", 
   assert.equal(tabsApi.created.every((tab) => tab.active === false), true);
   assert.deepEqual(tabsApi.removed, [1, 2, 3, 4]);
   assert.equal(storage.observations.size, 4);
+  assert.equal(
+    tabsApi.sentMessages.every(
+      ({ plan }) =>
+        plan.adultCount === 1 &&
+        plan.cabin === "economy" &&
+        plan.originCityName === "杭州" &&
+        plan.destinationCityName === "长春",
+    ),
+    true,
+  );
+  assert.equal(Object.hasOwn(plans[0], "adultCount"), false);
+  assert.equal(Object.hasOwn(plans[0], "cabin"), false);
 });
 
 test("records adapter timeouts as failures and always removes the tab", async () => {

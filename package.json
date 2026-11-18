@@ -4,6 +4,15 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "verify": "node scripts/verify-extension.mjs"
+    "build": "vite build && node scripts/copy-extension-assets.mjs",
+    "verify": "npm run build && node scripts/verify-extension.mjs"
+  },
+  "dependencies": {
+    "element-plus": "^2.14.8",
+    "vue": "^3.5.45"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.11",
+    "vite": "^8.3.8"
   }
 }

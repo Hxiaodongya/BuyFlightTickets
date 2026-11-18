@@ -1,5 +1,6 @@
+import { findCityByAirportCode, getCityById } from "./cities.js";
+
 const SUPPORTED_AIRLINES = new Set(["CA", "CZ"]);
-const SUPPORTED_CABINS = new Set(["economy", "business", "first"]);
 const AIRLINE_NAMES = {
   CA: "中国国际航空",
   CZ: "中国南方航空",
@@ -24,26 +25,24 @@ function makeId() {
 
 export function validatePlan(input = {}) {
   const errors = {};
-  const originCode = String(input.originCode ?? "").trim().toUpperCase();
-  const destinationCode = String(input.destinationCode ?? "")
-    .trim()
-    .toUpperCase();
+  const originCityId = String(input.originCityId ?? "").trim();
+  const destinationCityId = String(input.destinationCityId ?? "").trim();
+  const originCity = getCityById(originCityId);
+  const destinationCity = getCityById(destinationCityId);
   const travelDates = Array.isArray(input.travelDates) ? input.travelDates : [];
   const airlineCodes = Array.isArray(input.airlineCodes)
     ? input.airlineCodes.map((code) => String(code).trim().toUpperCase())
     : [];
-  const adultCount = input.adultCount ?? 1;
-  const cabin = input.cabin ?? "economy";
   const collectionTime = input.collectionTime ?? "09:00";
 
-  if (!/^[A-Z]{3}$/.test(originCode)) {
-    errors.originCode = "请输入有效的出发机场三字码";
+  if (!originCity) {
+    errors.originCityId = "请选择有效的出发城市";
   }
 
-  if (!/^[A-Z]{3}$/.test(destinationCode)) {
-    errors.destinationCode = "请输入有效的到达机场三字码";
-  } else if (originCode === destinationCode) {
-    errors.destinationCode = "出发和到达机场不能相同";
+  if (!destinationCity) {
+    errors.destinationCityId = "请选择有效的到达城市";
+  } else if (originCity && originCity.id === destinationCity.id) {
+    errors.destinationCityId = "出发和到达城市不能相同";
   }
 
   if (travelDates.length === 0 || !travelDates.every(isValidDate)) {
@@ -55,14 +54,6 @@ export function validatePlan(input = {}) {
     airlineCodes.some((code) => !SUPPORTED_AIRLINES.has(code))
   ) {
     errors.airlineCodes = "请选择国航或南航";
-  }
-
-  if (!Number.isInteger(adultCount) || adultCount < 1 || adultCount > 9) {
-    errors.adultCount = "成人乘客数须为 1 至 9 人";
-  }
-
-  if (!SUPPORTED_CABINS.has(cabin)) {
-    errors.cabin = "请选择有效舱位";
   }
 
   if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(collectionTime)) {
@@ -78,27 +69,63 @@ export function normalizePlan(input = {}) {
     throw new TypeError(`Invalid plan: ${Object.keys(errors).join(", ")}`);
   }
 
-  const originCode = input.originCode.trim().toUpperCase();
-  const destinationCode = input.destinationCode.trim().toUpperCase();
+  const originCity = getCityById(input.originCityId);
+  const destinationCity = getCityById(input.destinationCityId);
   const now = new Date().toISOString();
 
   return {
     id: input.id || makeId(),
-    name: String(input.name ?? "").trim() || `${originCode}-${destinationCode}`,
-    originName: String(input.originName ?? "").trim(),
-    originCode,
-    destinationName: String(input.destinationName ?? "").trim(),
-    destinationCode,
+    originCityId: originCity.id,
+    originCityName: originCity.name,
+    destinationCityId: destinationCity.id,
+    destinationCityName: destinationCity.name,
     travelDates: [...new Set(input.travelDates)].sort(),
     airlineCodes: [
       ...new Set(input.airlineCodes.map((code) => code.trim().toUpperCase())),
     ],
-    adultCount: input.adultCount ?? 1,
-    cabin: input.cabin ?? "economy",
     collectionTime: input.collectionTime ?? "09:00",
     enabled: input.enabled ?? true,
     createdAt: input.createdAt || now,
     updatedAt: now,
+  };
+}
+
+export function migrateStoredPlan(input = {}) {
+  if (input.migrationStatus === "needs-city-selection") {
+    return { ...input, enabled: false };
+  }
+
+  const originCity =
+    getCityById(input.originCityId) ?? findCityByAirportCode(input.originCode);
+  const destinationCity =
+    getCityById(input.destinationCityId) ??
+    findCityByAirportCode(input.destinationCode);
+
+  if (
+    originCity &&
+    destinationCity &&
+    originCity.id !== destinationCity.id
+  ) {
+    const normalizedPlan = normalizePlan({
+      ...input,
+      originCityId: originCity.id,
+      destinationCityId: destinationCity.id,
+    });
+    return {
+      ...normalizedPlan,
+      createdAt: input.createdAt || normalizedPlan.createdAt,
+      updatedAt: input.updatedAt || normalizedPlan.updatedAt,
+    };
+  }
+
+  return {
+    ...input,
+    originCityId: originCity?.id ?? "",
+    originCityName: originCity?.name ?? "",
+    destinationCityId: destinationCity?.id ?? "",
+    destinationCityName: destinationCity?.name ?? "",
+    enabled: false,
+    migrationStatus: "needs-city-selection",
   };
 }
 
@@ -168,7 +195,7 @@ export function normalizeObservations(
         travelDate,
         airlineCode: code,
         flightNo,
-        cabin: row.cabin || plan.cabin || "economy",
+        cabin: "economy",
         fareProduct: row.fareProduct || null,
       };
 
@@ -177,14 +204,14 @@ export function normalizeObservations(
         ...observation,
         capturedAt: capturedDate.toISOString(),
         captureDate,
-        originCode: plan.originCode,
-        originName: plan.originName || "",
-        destinationCode: plan.destinationCode,
-        destinationName: plan.destinationName || "",
+        originCityId: plan.originCityId,
+        originCityName: plan.originCityName,
+        destinationCityId: plan.destinationCityId,
+        destinationCityName: plan.destinationCityName,
         stopCount,
         listedFareCny,
         currency: "CNY",
-        adultCount: plan.adultCount ?? 1,
+        adultCount: 1,
         airlineName: AIRLINE_NAMES[code],
         source: row.source || AIRLINE_NAMES[code],
         sourceUrl: row.sourceUrl || null,
