@@ -2,7 +2,7 @@
 
 ## 中国航线城市数据
 
-`src/shared/china-cities.json` 中的城市和机场映射数据摘自 [TMC_Dataset](https://github.com/Timeon1/TMC_Dataset)，获取日期为 2026-11-18。数据仅用于城市选项、航司内部城市代码解析和旧计划迁移；界面只展示城市名称。
+`src/shared/china-cities.js` 中的城市和机场映射数据摘自 [TMC_Dataset](https://github.com/Timeon1/TMC_Dataset)，获取日期为 2026-11-18。数据仅用于城市选项、航司内部城市代码解析和旧计划迁移；界面只展示城市名称。
 
 上游许可证为 MIT，版权声明为 YanWei，2024：
 

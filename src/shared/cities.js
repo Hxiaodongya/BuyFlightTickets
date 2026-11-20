@@ -1,4 +1,4 @@
-import cityRows from "./china-cities.json" with { type: "json" };
+import cityRows from "./china-cities.js";
 
 const cities = Object.freeze(
   cityRows.map((city) =>

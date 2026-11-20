@@ -1,4 +1,4 @@
-[
+export default [
   {
     "id": "city-ahj",
     "name": "阿坝",
@@ -2898,4 +2898,4 @@
       "ZYI"
     ]
   }
-]
+];

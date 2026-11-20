@@ -1,7 +1,9 @@
+import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readdir, readFile, stat } from "node:fs/promises";
+import { register } from "node:module";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outputRoot = path.join(projectRoot, "dist");
@@ -79,4 +81,40 @@ for (const file of javascriptFiles) {
   }
 }
 
-console.log(`Built extension verified; ${javascriptFiles.length} JavaScript files pass syntax checks.`);
+const installedWorkerLoader = `
+  export function load(url, context, nextLoad) {
+    if (context.importAttributes.type === "json") {
+      throw new Error("Installed Chrome extension workers cannot load JSON modules: " + url);
+    }
+    return nextLoad(url, context);
+  }
+`;
+register(`data:text/javascript,${encodeURIComponent(installedWorkerLoader)}`);
+
+let onActionClick;
+let onMessage;
+const openedTabs = [];
+const emptyStorage = { async get() { return {}; } };
+const unusedEvent = { addListener() {} };
+globalThis.chrome = {
+  storage: { local: emptyStorage, session: emptyStorage },
+  tabs: { async create(properties) { openedTabs.push(properties); } },
+  action: { onClicked: { addListener(listener) { onActionClick = listener; } } },
+  runtime: {
+    onInstalled: unusedEvent,
+    onStartup: unusedEvent,
+    onMessage: { addListener(listener) { onMessage = listener; } },
+    getURL(resource) { return `chrome-extension://test/${resource}`; },
+  },
+  alarms: { onAlarm: unusedEvent },
+};
+
+await import(pathToFileURL(path.join(outputRoot, manifest.background.service_worker)).href);
+await onActionClick();
+assert.deepEqual(openedTabs, [{ url: `chrome-extension://test/${dashboardPath}` }]);
+const status = await new Promise((resolve) => {
+  assert.equal(onMessage({ type: "GET_STATUS" }, {}, resolve), true);
+});
+assert.deepEqual(status, { todayStatus: "not-collected", currentRun: null, lastRun: null });
+
+console.log(`Built extension verified; ${javascriptFiles.length} JavaScript files pass syntax checks and the service worker handles events after cold start.`);
