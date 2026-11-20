@@ -6,14 +6,21 @@
     </header>
 
     <main>
-      <p class="fare-note">列表价（未含税费）</p>
+      <p class="fare-note">经济舱价格 · 未含税费</p>
       <div class="status-row">
         <span class="status-dot" :class="`status-dot--${statusType}`" />
         <strong role="status" aria-live="polite">{{ statusLabel }}</strong>
       </div>
       <p class="run-time">{{ runTime }}</p>
       <p class="run-counts">{{ runCounts }}</p>
+      <VerificationPanel
+        v-if="isPaused"
+        :key="`${currentRun.id}:${currentRun.manualVerification.taskIndex}`"
+        :run="currentRun"
+        @change="refresh"
+      />
       <el-button
+        v-else
         type="primary"
         class="collect-button"
         :loading="collecting || isRunning"
@@ -29,10 +36,12 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import VerificationPanel from "../shared/VerificationPanel.vue";
 
 const STATUS_LABELS = {
   "not-collected": "今日尚未采集",
   running: "采集中",
+  paused: "等待人工验证",
   complete: "今日采集完成",
   partial: "今日采集不完整",
   failed: "今日采集失败",
@@ -46,11 +55,11 @@ const errorMessage = ref("");
 let statusTimer;
 
 const isRunning = computed(() => currentRun.value?.status === "running");
-const statusLabel = computed(() =>
-  STATUS_LABELS[isRunning.value ? "running" : todayStatus.value] ?? "状态未知",
-);
+const isPaused = computed(() => currentRun.value?.status === "paused" && Boolean(currentRun.value.manualVerification));
+const statusCode = computed(() => isPaused.value ? "paused" : isRunning.value ? "running" : todayStatus.value);
+const statusLabel = computed(() => STATUS_LABELS[statusCode.value] ?? "状态未知");
 const statusType = computed(() => {
-  if (isRunning.value || todayStatus.value === "partial") {
+  if (["running", "paused", "partial"].includes(statusCode.value)) {
     return "warning";
   }
   if (todayStatus.value === "complete") {

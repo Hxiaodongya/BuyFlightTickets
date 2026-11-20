@@ -1,5 +1,5 @@
 import { airlineAdapters } from "../collectors/airline-config.js";
-import { createCollector } from "./collector.js";
+import { createCollector, openLoongAirQuoteSearch } from "./collector.js";
 import {
   createScheduler,
   getTodayCollectionStatus,
@@ -7,11 +7,14 @@ import {
 } from "./scheduler.js";
 import { createStorage } from "../shared/storage.js";
 
+const dashboardUrl = chrome.runtime.getURL("src/dashboard/index.html");
 const storage = createStorage(chrome.storage.local);
 const collector = createCollector({
   tabsApi: chrome.tabs,
+  windowsApi: chrome.windows,
   runtimeApi: chrome.runtime,
   storage,
+  sessionArea: chrome.storage.session,
   adapters: airlineAdapters,
 });
 const scheduler = createScheduler({
@@ -21,51 +24,32 @@ const scheduler = createScheduler({
     collector.startRun("scheduled", { planIds: [planId] }),
 });
 
-async function seedExamplePlan() {
-  const plans = await storage.listPlans();
-  if (plans.length > 0) {
-    return;
-  }
+let readiness = collector.getResumableRunId()
+  .then((runId) => markInterruptedRuns(storage, new Date(), runId))
+  .catch((error) => console.error("Flight tracker recovery failed", error));
 
-  await storage.savePlan({
-    id: "example-hgh-cgq",
-    originCityId: "city-hgh",
-    destinationCityId: "city-cgq",
-    travelDates: ["2027-02-04", "2027-02-05"],
-    airlineCodes: ["CA", "CZ"],
-    collectionTime: "09:00",
-    enabled: true,
-  });
+function initialize() {
+  readiness = readiness
+    .then(() => scheduler.rescheduleAll())
+    .catch((error) => console.error("Flight tracker initialization failed", error));
 }
 
-async function initialize(isInstall = false) {
-  if (isInstall) {
-    await seedExamplePlan();
-  } else {
-    await markInterruptedRuns(storage);
-  }
-  await scheduler.rescheduleAll();
-}
-
-chrome.runtime.onInstalled.addListener((details) =>
-  initialize(details.reason === "install").catch((error) =>
-    console.error("Flight tracker initialization failed", error),
-  ),
-);
-
-chrome.runtime.onStartup.addListener(() =>
-  initialize().catch((error) =>
-    console.error("Flight tracker startup failed", error),
-  ),
+chrome.runtime.onInstalled.addListener(initialize);
+chrome.runtime.onStartup.addListener(initialize);
+chrome.action.onClicked.addListener(() =>
+  chrome.tabs.create({ url: dashboardUrl }).catch((error) => {
+    console.error("Flight tracker could not open the dashboard", error);
+  }),
 );
 
 chrome.alarms.onAlarm.addListener((alarm) =>
-  scheduler.handleAlarm(alarm).catch((error) =>
-    console.error("Scheduled collection failed", error),
-  ),
+  readiness.then(() => scheduler.handleAlarm(alarm)).catch((error) => {
+    if (error.code !== "RUN_ALREADY_ACTIVE") console.error("Scheduled collection failed", error);
+  }),
 );
 
-async function handleMessage(message) {
+async function handleMessage(message, sender) {
+  await readiness;
   switch (message?.type) {
     case "GET_STATUS": {
       const runs = await storage.listRuns();
@@ -77,6 +61,16 @@ async function handleMessage(message) {
     }
     case "START_MANUAL_RUN":
       return collector.startRun("manual");
+    case "OPEN_VERIFICATION_TAB":
+      return collector.openVerificationTab(message.runId, message.taskIndex);
+    case "RESUME_COLLECTION_RUN":
+      return collector.resumeRun(message.runId, message.taskIndex);
+    case "SKIP_VERIFICATION_TASK":
+      return collector.skipVerificationTask(message.runId, message.taskIndex);
+    case "GET_VERIFICATION_WATCH":
+      return collector.getVerificationWatch(sender);
+    case "VERIFICATION_RESULTS_READY":
+      return collector.resumeFromVerifiedResults(message, sender);
     case "GET_PLANS":
       return storage.listPlans();
     case "SAVE_PLAN": {
@@ -91,6 +85,29 @@ async function handleMessage(message) {
     }
     case "GET_OBSERVATIONS":
       return storage.listObservations(message.filters ?? {});
+    case "EXPORT_BACKUP":
+    case "RESTORE_BACKUP": {
+      if (sender?.url !== dashboardUrl) {
+        throw new Error("请在扩展的航班价格看板中管理备份");
+      }
+      if (message.type === "EXPORT_BACKUP") return storage.exportBackup();
+
+      return collector.restoreWhileIdle(async () => {
+        const counts = await storage.restoreBackup(message.backup, message.strategy);
+        try {
+          await scheduler.rescheduleAll();
+        } catch (error) {
+          console.error("Flight tracker could not reschedule restored plans", error);
+          return { counts, warning: "数据已恢复，部分采集计划的定时任务未更新。" };
+        }
+        return { counts };
+      });
+    }
+    case "OPEN_LOONG_AIR_QUOTE":
+      if (sender?.url !== dashboardUrl) {
+        throw new Error("请从扩展的航班报价页打开查询");
+      }
+      return openLoongAirQuoteSearch(chrome.tabs, message.quote);
     case "GET_RUNS":
       return storage.listRuns();
     default:
@@ -103,7 +120,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ received: true });
     return false;
   }
-  handleMessage(message)
+  handleMessage(message, sender)
     .then(sendResponse)
     .catch((error) =>
       sendResponse({

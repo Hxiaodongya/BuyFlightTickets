@@ -49,6 +49,12 @@ test("reports whether today's latest run is missing, complete, or partial", () =
   );
 });
 
+test("reports today's paused run as waiting for verification rather than failed", () => {
+  const now = new Date(2026, 10, 18, 12);
+  const startedAt = new Date(2026, 10, 18, 9).toISOString();
+  assert.equal(getTodayCollectionStatus([{ startedAt, status: "paused" }], now), "paused");
+});
+
 test("marks persisted running jobs as interrupted after Chrome restarts", async () => {
   const runs = [
     {
@@ -81,6 +87,32 @@ test("marks persisted running jobs as interrupted after Chrome restarts", async 
   assert.equal(saved.length, 1);
   assert.equal(saved[0].status, "partial");
   assert.equal(saved[0].endedAt, "2026-11-18T04:00:00.000Z");
+});
+
+test("preserves only the verification pause that belongs to the current browser session", async () => {
+  const createPause = (id) => ({
+    id,
+    status: "paused",
+    successCount: 1,
+    failureCount: 0,
+    manualVerification: { taskIndex: 1 },
+    tasks: [{ status: "complete" }, { status: "awaiting-manual" }, { status: "pending" }],
+  });
+  const saved = [];
+  const storage = {
+    async listRuns() { return [createPause("resumable"), createPause("stale")]; },
+    async saveRun(run) { saved.push(structuredClone(run)); },
+  };
+
+  const interrupted = await markInterruptedRuns(storage, new Date("2026-11-18T04:00:00.000Z"), "resumable");
+
+  assert.equal(interrupted, 1);
+  assert.equal(saved[0].id, "stale");
+  assert.equal(saved[0].status, "partial");
+  assert.equal(saved[0].successCount, 1);
+  assert.equal(saved[0].failureCount, 1);
+  assert.deepEqual(saved[0].tasks.map(({ status }) => status), ["complete", "failed", "pending"]);
+  assert.equal(Object.hasOwn(saved[0], "manualVerification"), false);
 });
 
 test("recreates enabled plan alarms and removes stale alarms", async () => {
@@ -160,4 +192,31 @@ test("runs only the alarm plan and schedules its next occurrence", async () => {
       options: { when: new Date(2026, 10, 19, 9, 0).getTime() },
     },
   ]);
+});
+
+test("rescheduling after restore removes a plan alarm even if an earlier write is in flight", async () => {
+  let plans = [{ id: "old", enabled: true, collectionTime: "09:00" }];
+  const alarms = new Map();
+  const creating = Promise.withResolvers();
+  const releaseCreate = Promise.withResolvers();
+  const scheduler = createScheduler({
+    storage: { listPlans: async () => plans },
+    alarmsApi: {
+      async getAll() { return [...alarms.values()]; },
+      async create(name) {
+        creating.resolve();
+        await releaseCreate.promise;
+        alarms.set(name, { name });
+      },
+      async clear(name) { alarms.delete(name); },
+    },
+  });
+  const first = scheduler.reschedulePlan("old");
+  await creating.promise;
+  plans = [];
+  const afterRestore = scheduler.rescheduleAll();
+  await new Promise((resolve) => setImmediate(resolve));
+  releaseCreate.resolve();
+  await Promise.all([first, afterRestore]);
+  assert.equal(alarms.size, 0);
 });

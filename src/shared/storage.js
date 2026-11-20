@@ -1,11 +1,13 @@
 import { migrateStoredPlan, normalizePlan } from "./domain.js";
+import { createBackup, validateBackup } from "./backup.js";
 
 const PLAN_PREFIX = "plan:";
 const RUN_PREFIX = "run:";
 const OBSERVATION_PREFIX = "observation:";
+const BACKUP_PREFIXES = { plans: PLAN_PREFIX, observations: OBSERVATION_PREFIX, runs: RUN_PREFIX };
 
-function hasPrefix(key, prefix) {
-  return key.startsWith(prefix);
+function entriesByPrefix(values, prefix) {
+  return Object.entries(values).filter(([key, value]) => key.startsWith(prefix) && value != null);
 }
 
 export function createStorage(storageArea) {
@@ -13,19 +15,24 @@ export function createStorage(storageArea) {
     throw new TypeError("A Chrome storage area is required");
   }
 
+  let pendingWrite = Promise.resolve();
+
+  function orderedWrite(write) {
+    return (...args) => {
+      const result = pendingWrite.then(() => write(...args));
+      pendingWrite = result.catch(() => {});
+      return result;
+    };
+  }
+
   async function listByPrefix(prefix) {
-    const values = await storageArea.get(null);
-    return Object.entries(values)
-      .filter(([key]) => hasPrefix(key, prefix))
-      .map(([, value]) => value);
+    return entriesByPrefix(await storageArea.get(null), prefix).map(([, value]) => value);
   }
 
   return {
-    async listPlans() {
+    listPlans: orderedWrite(async () => {
       const values = await storageArea.get(null);
-      const entries = Object.entries(values).filter(([key]) =>
-        hasPrefix(key, PLAN_PREFIX),
-      );
+      const entries = entriesByPrefix(values, PLAN_PREFIX);
       const migratedEntries = entries.map(([key, value]) => [
         key,
         migrateStoredPlan(value),
@@ -41,17 +48,17 @@ export function createStorage(storageArea) {
       }
 
       return migratedEntries.map(([, value]) => value);
-    },
+    }),
 
-    async savePlan(plan) {
+    savePlan: orderedWrite(async (plan) => {
       const normalizedPlan = normalizePlan(plan);
       await storageArea.set({
         [`${PLAN_PREFIX}${normalizedPlan.id}`]: normalizedPlan,
       });
       return normalizedPlan;
-    },
+    }),
 
-    async deletePlan(planId) {
+    deletePlan: orderedWrite(async (planId) => {
       const observations = await listByPrefix(OBSERVATION_PREFIX);
       const keys = [
         `${PLAN_PREFIX}${planId}`,
@@ -60,7 +67,7 @@ export function createStorage(storageArea) {
           .map((observation) => `${OBSERVATION_PREFIX}${observation.id}`),
       ];
       await storageArea.remove(keys);
-    },
+    }),
 
     async listRuns() {
       const runs = await listByPrefix(RUN_PREFIX);
@@ -70,14 +77,14 @@ export function createStorage(storageArea) {
       );
     },
 
-    async saveRun(run) {
+    saveRun: orderedWrite(async (run) => {
       if (!run?.id) {
         throw new TypeError("A run ID is required");
       }
 
       await storageArea.set({ [`${RUN_PREFIX}${run.id}`]: run });
       return run;
-    },
+    }),
 
     async listObservations(filters = {}) {
       const observations = await listByPrefix(OBSERVATION_PREFIX);
@@ -88,7 +95,7 @@ export function createStorage(storageArea) {
       );
     },
 
-    async saveObservations(observations) {
+    saveObservations: orderedWrite(async (observations) => {
       if (!Array.isArray(observations)) {
         throw new TypeError("Observations must be an array");
       }
@@ -112,6 +119,44 @@ export function createStorage(storageArea) {
       }
 
       return [...uniqueObservations.values()];
+    }),
+
+    async exportBackup(now = new Date()) {
+      const values = await storageArea.get(null);
+      const records = Object.fromEntries(Object.entries(BACKUP_PREFIXES).map(([category, prefix]) => [
+        category, entriesByPrefix(values, prefix).map(([, value]) => value),
+      ]));
+      return createBackup(records, now);
     },
+
+    restoreBackup: orderedWrite(async (input, strategy) => {
+      if (strategy !== "merge" && strategy !== "overwrite") throw new TypeError("请选择有效的恢复方式。");
+      const backup = validateBackup(input);
+      const existing = await storageArea.get(null);
+      const changes = {};
+      const obsoleteKeys = [];
+      const counts = {};
+
+      for (const [category, prefix] of Object.entries(BACKUP_PREFIXES)) {
+        counts[category] = 0;
+        for (const record of backup[category]) {
+          const key = `${prefix}${record.id}`;
+          if (strategy === "merge" && existing[key] != null) continue;
+          changes[key] = record;
+          counts[category] += 1;
+        }
+        if (strategy === "overwrite") {
+          for (const key of Object.keys(existing)) {
+            if (!key.startsWith(prefix) || Object.hasOwn(changes, key)) continue;
+            changes[key] = null;
+            obsoleteKeys.push(key);
+          }
+        }
+      }
+
+      if (Object.keys(changes).length) await storageArea.set(changes);
+      if (obsoleteKeys.length) await storageArea.remove(obsoleteKeys).catch(() => {});
+      return counts;
+    }),
   };
 }

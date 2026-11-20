@@ -13,7 +13,6 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        popup: path.resolve(projectRoot, "src/popup/index.html"),
         dashboard: path.resolve(projectRoot, "src/dashboard/index.html"),
       },
     },

@@ -1,4 +1,4 @@
-const ALARM_PREFIX = "daily-collection:";
+export const ALARM_PREFIX = "daily-collection:";
 
 function asDate(value) {
   const date = value instanceof Date ? new Date(value.valueOf()) : new Date(value);
@@ -50,6 +50,9 @@ export function getTodayCollectionStatus(runs, now = new Date()) {
   if (latestTodayRun.status === "running") {
     return "running";
   }
+  if (latestTodayRun.status === "paused") {
+    return "paused";
+  }
   if (latestTodayRun.status === "complete" || latestTodayRun.status === "completed") {
     return "complete";
   }
@@ -59,16 +62,29 @@ export function getTodayCollectionStatus(runs, now = new Date()) {
   return "failed";
 }
 
-export async function markInterruptedRuns(storage, now = new Date()) {
+export async function markInterruptedRuns(storage, now = new Date(), resumableRunId = null) {
   const endedAt = asDate(now).toISOString();
   const runs = await storage.listRuns();
-  const interrupted = runs.filter((run) => run.status === "running");
+  const interrupted = runs.filter((run) =>
+    run.status === "running" || (run.status === "paused" && run.id !== resumableRunId),
+  );
 
   for (const run of interrupted) {
+    const message = run.status === "paused"
+      ? "Chrome 会话已结束，无法继续原待验证任务"
+      : "Chrome closed before this collection run finished";
+    const pendingVerification = run.tasks?.[run.manualVerification?.taskIndex];
+    if (pendingVerification?.status === "awaiting-manual") {
+      pendingVerification.status = "failed";
+      pendingVerification.error = message;
+      pendingVerification.endedAt = endedAt;
+      run.failureCount = (run.failureCount ?? 0) + 1;
+    }
+    delete run.manualVerification;
     run.status = run.successCount > 0 ? "partial" : "failed";
     run.endedAt = endedAt;
     run.updatedAt = endedAt;
-    run.error = "Chrome closed before this collection run finished";
+    run.error = message;
     await storage.saveRun(run);
   }
 
@@ -78,6 +94,16 @@ export async function markInterruptedRuns(storage, now = new Date()) {
 export function createScheduler({ alarmsApi, storage, onScheduledRun, now = () => new Date() }) {
   if (!alarmsApi || !storage) {
     throw new TypeError("Alarm and storage APIs are required");
+  }
+
+  let pendingSchedule = Promise.resolve();
+
+  function orderedSchedule(update) {
+    return (...args) => {
+      const result = pendingSchedule.then(() => update(...args));
+      pendingSchedule = result.catch(() => {});
+      return result;
+    };
   }
 
   async function schedulePlan(plan) {
@@ -94,7 +120,7 @@ export function createScheduler({ alarmsApi, storage, onScheduledRun, now = () =
   }
 
   return {
-    async rescheduleAll() {
+    rescheduleAll: orderedSchedule(async () => {
       const plans = await storage.listPlans();
       const activeAlarmNames = new Set(
         plans
@@ -115,9 +141,9 @@ export function createScheduler({ alarmsApi, storage, onScheduledRun, now = () =
       for (const plan of plans) {
         await schedulePlan(plan);
       }
-    },
+    }),
 
-    async reschedulePlan(planId) {
+    reschedulePlan: orderedSchedule(async (planId) => {
       const plans = await storage.listPlans();
       const plan = plans.find((candidate) => candidate.id === planId);
       if (plan) {
@@ -125,7 +151,7 @@ export function createScheduler({ alarmsApi, storage, onScheduledRun, now = () =
       } else {
         await alarmsApi.clear(`${ALARM_PREFIX}${planId}`);
       }
-    },
+    }),
 
     async handleAlarm(alarm) {
       if (!alarm?.name?.startsWith(ALARM_PREFIX)) {

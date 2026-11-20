@@ -7,10 +7,17 @@ const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "
 const outputRoot = path.join(projectRoot, "dist");
 const manifestPath = path.join(outputRoot, "manifest.json");
 const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+const dashboardPath = "src/dashboard/index.html";
+
+if (!manifest.action || Object.hasOwn(manifest.action, "default_popup")) {
+  throw new Error("The manifest must define a toolbar action without a popup.");
+}
+
 const requiredFiles = [
   manifest.background?.service_worker,
-  manifest.action?.default_popup,
-  "src/dashboard/index.html",
+  ...Object.values(manifest.icons ?? {}),
+  ...Object.values(manifest.action.default_icon ?? {}),
+  dashboardPath,
   ...manifest.content_scripts.flatMap((script) => script.js),
 ];
 
@@ -24,39 +31,25 @@ for (const file of requiredFiles) {
   }
 }
 
-for (const script of manifest.content_scripts) {
-  const cityFormIndex = script.js.indexOf("src/collectors/city-form.js");
-  const collectorIndex = script.js.findIndex((file) =>
-    file === "src/collectors/airchina.js" || file === "src/collectors/csair.js",
-  );
-  if (cityFormIndex < 0 || collectorIndex < 0 || cityFormIndex > collectorIndex) {
-    throw new Error("Each airline content script must load city-form.js before its collector");
-  }
+const htmlPath = path.join(outputRoot, dashboardPath);
+const html = await readFile(htmlPath, "utf8");
+if (!html.includes('id="app"')) {
+  throw new Error(`Vue application mount point is missing: ${dashboardPath}`);
+}
+if (/\b(?:src|href)=["']https?:\/\//i.test(html)) {
+  throw new Error(`Extension UI must not load remote code or styles: ${dashboardPath}`);
 }
 
-for (const htmlPath of [
-  path.join(outputRoot, manifest.action.default_popup),
-  path.join(outputRoot, "src/dashboard/index.html"),
-]) {
-  const html = await readFile(htmlPath, "utf8");
-  if (!html.includes('id="app"')) {
-    throw new Error(`Vue application mount point is missing: ${path.relative(outputRoot, htmlPath)}`);
+for (const [, resource] of html.matchAll(/\b(?:src|href)=["']([^"']+)["']/g)) {
+  if (/^(?:data:|#)/i.test(resource)) {
+    continue;
   }
-  if (/\b(?:src|href)=["']https?:\/\//i.test(html)) {
-    throw new Error(`Extension UI must not load remote code or styles: ${path.relative(outputRoot, htmlPath)}`);
+  const resourcePath = path.resolve(path.dirname(htmlPath), resource.split(/[?#]/, 1)[0]);
+  if (!resourcePath.startsWith(`${outputRoot}${path.sep}`)) {
+    throw new Error(`Extension resource escapes dist/: ${resource}`);
   }
-
-  for (const [, resource] of html.matchAll(/\b(?:src|href)=["']([^"']+)["']/g)) {
-    if (/^(?:data:|#)/i.test(resource)) {
-      continue;
-    }
-    const resourcePath = path.resolve(path.dirname(htmlPath), resource.split(/[?#]/, 1)[0]);
-    if (!resourcePath.startsWith(`${outputRoot}${path.sep}`)) {
-      throw new Error(`Extension resource escapes dist/: ${resource}`);
-    }
-    if (!(await stat(resourcePath).then(() => true, () => false))) {
-      throw new Error(`Built UI asset is missing: ${resource}`);
-    }
+  if (!(await stat(resourcePath).then(() => true, () => false))) {
+    throw new Error(`Built UI asset is missing: ${resource}`);
   }
 }
 

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { normalizeObservations } from "../src/shared/domain.js";
 import { createStorage } from "../src/shared/storage.js";
 
 function createMemoryArea(initial = {}) {
@@ -34,6 +35,46 @@ const basePlan = {
   travelDates: ["2027-02-04"],
   airlineCodes: ["CA"],
 };
+
+test("opens the full dashboard from the toolbar icon without seeding a plan", async (context) => {
+  let installExtension;
+  let openDashboard;
+  let handleMessage;
+  const openedTabs = [];
+  globalThis.chrome = {
+    storage: { local: createMemoryArea(), session: createMemoryArea() },
+    tabs: {
+      async create(properties) { openedTabs.push(properties); },
+    },
+    action: {
+      onClicked: { addListener(listener) { openDashboard = listener; } },
+    },
+    runtime: {
+      onInstalled: { addListener(listener) { installExtension = listener; } },
+      onStartup: { addListener() {} },
+      onMessage: { addListener(listener) { handleMessage = listener; } },
+      getURL(path) { return `chrome-extension://test/${path}`; },
+    },
+    alarms: {
+      onAlarm: { addListener() {} },
+      async getAll() { return []; },
+      async create() {},
+    },
+  };
+  context.after(() => { delete globalThis.chrome; });
+
+  await import("../src/background/service-worker.js");
+  assert.equal(typeof openDashboard, "function");
+  await openDashboard();
+  assert.deepEqual(openedTabs, [
+    { url: "chrome-extension://test/src/dashboard/index.html" },
+  ]);
+
+  installExtension({ reason: "install" });
+
+  const plans = await new Promise((resolve) => handleMessage({ type: "GET_PLANS" }, {}, resolve));
+  assert.deepEqual(plans, []);
+});
 
 test("upserts a plan by ID", async () => {
   const storage = createStorage(createMemoryArea());
@@ -166,4 +207,96 @@ test("propagates storage quota errors", async () => {
     storage.saveRun({ id: "run-1", startedAt: "2026-11-18T09:00:00Z" }),
     /quota exceeded/,
   );
+});
+
+const backupTime = "2026-11-20T01:40:00.000Z";
+
+async function addBackupRecords(storage, planInput = basePlan, fare = 1650) {
+  const plan = await storage.savePlan(planInput);
+  const [observation] = await storage.saveObservations(normalizeObservations(
+    plan, "CA", [{ flightNo: "CA1753", listedFareCny: fare, stopCount: 0 }], backupTime,
+  ));
+  const run = await storage.saveRun({
+    id: `run-${plan.id}`,
+    status: "complete",
+    trigger: "manual",
+    startedAt: backupTime,
+    successCount: 1,
+    failureCount: 0,
+    tasks: [{ planId: plan.id, airlineCode: "CA", travelDate: plan.travelDates[0], status: "complete" }],
+  });
+  return { plan, observation, run };
+}
+
+test("a full backup round trips plans, fare dates and IDs, and collection runs", async () => {
+  const source = createStorage(createMemoryArea());
+  const { plan, observation, run } = await addBackupRecords(source);
+  const backup = await source.exportBackup(new Date(backupTime));
+  const target = createStorage(createMemoryArea());
+
+  assert.equal(backup.exportedAt, backupTime);
+  await target.restoreBackup(JSON.parse(JSON.stringify(backup)), "merge");
+  assert.deepEqual(await target.listPlans(), [plan]);
+  assert.deepEqual(await target.listObservations(), [observation]);
+  assert.deepEqual(await target.listRuns(), [run]);
+});
+
+test("smart merge preserves local IDs and prices and only adds new records", async () => {
+  const local = createStorage(createMemoryArea());
+  const incoming = createStorage(createMemoryArea());
+  await addBackupRecords(local, { ...basePlan, collectionTime: "07:00" });
+  await addBackupRecords(incoming, { ...basePlan, collectionTime: "11:00" }, 1900);
+  await addBackupRecords(incoming, { ...basePlan, id: "second" });
+  const backup = await incoming.exportBackup(new Date(backupTime));
+
+  assert.deepEqual(await local.restoreBackup(backup, "merge"), { plans: 1, observations: 1, runs: 1 });
+  assert.deepEqual(await local.restoreBackup(backup, "merge"), { plans: 0, observations: 0, runs: 0 });
+  assert.equal((await local.listPlans()).find(({ id }) => id === basePlan.id).collectionTime, "07:00");
+  assert.equal((await local.listObservations({ planId: basePlan.id }))[0].listedFareCny, 1650);
+});
+
+test("overwrite replaces all data records and retains unrelated extension settings", async () => {
+  const area = createMemoryArea({ preference: { theme: "system" } });
+  const local = createStorage(area);
+  const incoming = createStorage(createMemoryArea());
+  await addBackupRecords(local);
+  const { plan, observation, run } = await addBackupRecords(incoming, { ...basePlan, id: "incoming" });
+
+  await local.restoreBackup(await incoming.exportBackup(new Date(backupTime)), "overwrite");
+  assert.deepEqual(await local.listPlans(), [plan]);
+  assert.deepEqual(await local.listObservations(), [observation]);
+  assert.deepEqual(await local.listRuns(), [run]);
+  assert.deepEqual(await area.get("preference"), { preference: { theme: "system" } });
+});
+
+test("failed validation or storage writes leave existing records intact", async () => {
+  const area = createMemoryArea();
+  const local = createStorage(area);
+  const incoming = createStorage(createMemoryArea());
+  await addBackupRecords(local);
+  await addBackupRecords(incoming, { ...basePlan, id: "incoming" });
+  const backup = await incoming.exportBackup(new Date(backupTime));
+  const original = await area.get(null);
+  const invalid = { ...backup, observations: [{ ...backup.observations[0], listedFareCny: -1 }] };
+
+  await assert.rejects(local.restoreBackup(invalid, "overwrite"), /航班报价/);
+  assert.deepEqual(await area.get(null), original);
+
+  area.set = async () => { throw new Error("QUOTA_BYTES quota exceeded"); };
+  await assert.rejects(local.restoreBackup(backup, "overwrite"), /quota exceeded/);
+  assert.deepEqual(await area.get(null), original);
+});
+
+test("a failed key cleanup leaves a fully replaced dataset visible", async () => {
+  const area = createMemoryArea();
+  const local = createStorage(area);
+  const incoming = createStorage(createMemoryArea());
+  await addBackupRecords(local);
+  const { plan, observation, run } = await addBackupRecords(incoming, { ...basePlan, id: "incoming" });
+  area.remove = async () => { throw new Error("cleanup failed"); };
+
+  await local.restoreBackup(await incoming.exportBackup(new Date(backupTime)), "overwrite");
+  assert.deepEqual(await local.listPlans(), [plan]);
+  assert.deepEqual(await local.listObservations(), [observation]);
+  assert.deepEqual(await local.listRuns(), [run]);
 });

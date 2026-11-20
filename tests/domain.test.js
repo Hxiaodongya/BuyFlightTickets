@@ -122,6 +122,38 @@ test("discards rows without a positive finite displayed fare", () => {
   );
 });
 
+test("preserves an unknown stop count without relabeling it as nonstop", () => {
+  const plan = normalizePlan({ ...validPlan, id: "plan-1" });
+  const [observation] = normalizeObservations(
+    plan,
+    "CZ",
+    [{ flightNo: "CZ8628", travelDate: "2027-02-04", listedFareCny: 1950, stopCount: null }],
+    "2026-11-18T09:00:00+08:00",
+  );
+
+  assert.equal(observation.listedFareCny, 1950);
+  assert.equal(observation.stopCount, null);
+});
+
+test("preserves airline schedule details and resolves overnight dates for domestic quotes", () => {
+  const plan = normalizePlan({ ...validPlan, id: "plan-1" });
+  const base = { travelDate: "2027-02-04", flightNo: "GJ8577", listedFareCny: 1650, stopCount: 1 };
+  const [explicit, overnight, durationOnly, sameDay, missing] = normalizeObservations(plan, "GJ", [
+    { ...base, departureTime: "23:10", arrivalTime: "01:20", arrivalDate: "2027-02-06", durationMinutes: 1570, hasStopover: true, stopoverName: "潍坊", transferCount: 0 },
+    { ...base, departureTime: "23:10", arrivalTime: "01:20", arrivalDayOffset: 1 },
+    { ...base, departureTime: "20:00", arrivalTime: "22:00", durationMinutes: 1560 },
+    { ...base, departureTime: "06:40", arrivalTime: "11:05" },
+    { ...base, departureTime: "06:40" },
+  ], "2026-11-18T09:00:00+08:00");
+
+  assert.deepEqual([explicit.departureTime, explicit.arrivalTime, explicit.arrivalDate, explicit.durationMinutes], ["23:10", "01:20", "2027-02-06", 1570]);
+  assert.deepEqual([explicit.hasStopover, explicit.stopoverName, explicit.transferCount], [true, "潍坊", 0]);
+  assert.deepEqual([overnight.arrivalDate, overnight.durationMinutes], ["2027-02-05", 130]);
+  assert.deepEqual([durationOnly.arrivalDate, durationOnly.durationMinutes], ["2027-02-05", 1560]);
+  assert.deepEqual([sameDay.arrivalDate, sameDay.durationMinutes], ["2027-02-04", 265]);
+  assert.deepEqual([missing.arrivalDate, missing.durationMinutes], [null, null]);
+});
+
 test("stores the listed fare without copying tax or total fields", () => {
   const plan = normalizePlan({ ...validPlan, id: "plan-1" });
   const [observation] = normalizeObservations(

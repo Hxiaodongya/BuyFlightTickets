@@ -71,8 +71,7 @@
 
       <el-form-item label="采集航司" prop="airlineCodes">
         <el-checkbox-group v-model="form.airlineCodes">
-          <el-checkbox value="CA">中国国际航空</el-checkbox>
-          <el-checkbox value="CZ">中国南方航空</el-checkbox>
+          <el-checkbox v-for="(name, code) in AIRLINE_NAMES" :key="code" :value="code">{{ name }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
 
@@ -107,6 +106,7 @@
 
 <script setup>
 import { computed, nextTick, reactive, ref, watch } from "vue";
+import { AIRLINE_NAMES } from "../../shared/domain.js";
 
 const props = defineProps({
   visible: { type: Boolean, default: false },
@@ -125,7 +125,7 @@ function makeEmptyForm() {
     originCityId: "",
     destinationCityId: "",
     travelDates: [],
-    airlineCodes: ["CA", "CZ"],
+    airlineCodes: Object.keys(AIRLINE_NAMES),
     collectionTime: "09:00",
     enabled: true,
   };

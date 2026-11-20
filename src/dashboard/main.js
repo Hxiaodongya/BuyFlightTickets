@@ -1,29 +1,37 @@
-import { createApp } from "vue";
+import { createApp, h } from "vue";
 import {
   ElAlert,
   ElButton,
   ElCheckbox,
   ElCheckboxGroup,
+  ElConfigProvider,
   ElDatePicker,
   ElDialog,
+  ElDrawer,
+  ElDropdown,
+  ElDropdownItem,
+  ElDropdownMenu,
   ElEmpty,
   ElForm,
   ElFormItem,
   ElOption,
-  ElRadioButton,
-  ElRadioGroup,
+  ElSegmented,
   ElSelect,
   ElSwitch,
-  ElTable,
-  ElTableColumn,
   ElTag,
   ElTimeSelect,
+  ElTooltip,
 } from "element-plus";
+import zhCn from "element-plus/es/locale/lang/zh-cn.mjs";
+import "dayjs/locale/zh-cn.js";
 import "element-plus/dist/index.css";
+import "../shared/theme.css";
 import "./app.css";
 import App from "./App.vue";
 
-const app = createApp(App);
+const app = createApp({
+  render: () => h(ElConfigProvider, { locale: zhCn }, () => h(App)),
+});
 for (const component of [
   ElAlert,
   ElButton,
@@ -31,18 +39,20 @@ for (const component of [
   ElCheckboxGroup,
   ElDatePicker,
   ElDialog,
+  ElDrawer,
+  ElDropdown,
+  ElDropdownItem,
+  ElDropdownMenu,
   ElEmpty,
   ElForm,
   ElFormItem,
   ElOption,
-  ElRadioButton,
-  ElRadioGroup,
+  ElSegmented,
   ElSelect,
   ElSwitch,
-  ElTable,
-  ElTableColumn,
   ElTag,
   ElTimeSelect,
+  ElTooltip,
 ]) {
   app.component(component.name, component);
 }

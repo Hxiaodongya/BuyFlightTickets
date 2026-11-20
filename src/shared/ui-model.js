@@ -1,9 +1,4 @@
-import { normalizePlan } from "./domain.js";
-
-const AIRLINE_NAMES = Object.freeze({
-  CA: "中国国际航空",
-  CZ: "中国南方航空",
-});
+import { AIRLINE_NAMES, normalizePlan } from "./domain.js";
 
 export function createPlanPayload(draft, existingPlan = null) {
   return normalizePlan({
