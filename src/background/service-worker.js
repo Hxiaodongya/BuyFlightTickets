@@ -1,5 +1,5 @@
 import { airlineAdapters } from "../collectors/airline-config.js";
-import { createCollector, openLoongAirQuoteSearch } from "./collector.js";
+import { createCollector, openLoongAirQuoteSearch, openSichuanAirQuoteSearch } from "./collector.js";
 import {
   createScheduler,
   getTodayCollectionStatus,
@@ -104,10 +104,13 @@ async function handleMessage(message, sender) {
       });
     }
     case "OPEN_LOONG_AIR_QUOTE":
+    case "OPEN_SICHUAN_AIR_QUOTE":
       if (sender?.url !== dashboardUrl) {
         throw new Error("请从扩展的航班报价页打开查询");
       }
-      return openLoongAirQuoteSearch(chrome.tabs, message.quote);
+      return message.type === "OPEN_SICHUAN_AIR_QUOTE"
+        ? openSichuanAirQuoteSearch(chrome.tabs, message.quote)
+        : openLoongAirQuoteSearch(chrome.tabs, message.quote);
     case "GET_RUNS":
       return storage.listRuns();
     default:

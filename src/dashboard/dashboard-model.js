@@ -40,7 +40,7 @@ export function findNextCollection(plans, alarms, planId, now = Date.now()) {
   return next;
 }
 
-const airlineColors = { CA: "--dashboard-ca", CZ: "--dashboard-cz", GJ: "--dashboard-gj" };
+const airlineColors = { CA: "--dashboard-ca", CZ: "--dashboard-cz", GJ: "--dashboard-gj", "3U": "--dashboard-3u" };
 const fareFormatter = new Intl.NumberFormat("zh-CN", { maximumFractionDigits: 2 });
 
 export function airlineColor(code) {

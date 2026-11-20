@@ -1,4 +1,5 @@
-import { buildQuoteSearchUrl } from "../collectors/airline-config.js";
+import { buildQuoteSearchUrl, buildSichuanAirResultUrl } from "../collectors/airline-config.js";
+import { findCityByAirportCode } from "../shared/cities.js";
 import { normalizeObservations } from "../shared/domain.js";
 
 const VERIFICATION_KEY = "pausedCollection";
@@ -61,7 +62,7 @@ function waitForTabComplete(tabsApi, tab, timeoutMs) {
   });
 }
 
-async function sendLoongAirMessage(tabsApi, tabId, request) {
+async function sendToAirlineFrame(tabsApi, tabId, request) {
   for (let attempt = 0; ; attempt += 1) {
     try {
       return await tabsApi.sendMessage(tabId, request, { frameId: 0 });
@@ -80,12 +81,64 @@ export async function openLoongAirQuoteSearch(tabsApi, quote, timeoutMs = 45_000
   if (tab?.id == null) throw new Error("无法打开长龙航空查询标签页");
   await waitForTabComplete(tabsApi, tab, timeoutMs);
   const response = await withTimeout(
-    sendLoongAirMessage(tabsApi, tab.id, { type: "OPEN_LOONG_AIR_QUOTE", searchUrl }),
+    sendToAirlineFrame(tabsApi, tab.id, { type: "OPEN_LOONG_AIR_QUOTE", searchUrl }),
     timeoutMs,
     "Loong Air quote search",
   );
   if (!response?.submitted && response?.pauseReason !== "human-verification") {
     throw new Error(response?.error || "长龙航空没有确认查询，请检查已打开的官网标签页");
+  }
+  return response;
+}
+
+async function reachSichuanAirBooking(tabsApi, tab, { searchUrl, resultUrl }, timeoutMs) {
+  const booking = new URL(resultUrl).origin;
+  const onBooking = (current) => current.url?.startsWith(`${booking}/`);
+  const deadline = Date.now() + timeoutMs;
+  if (!onBooking(tab)) {
+    const { searchParams } = new URL(searchUrl);
+    const submission = await withTimeout(
+      sendToAirlineFrame(tabsApi, tab.id, {
+        type: "SUBMIT_SICHUAN_AIR_SEARCH",
+        searchUrl,
+        originName: findCityByAirportCode(searchParams.get("flightTrackerFrom"))?.name,
+        destinationName: findCityByAirportCode(searchParams.get("flightTrackerTo"))?.name,
+      }),
+      timeoutMs,
+      "四川航空提交查询",
+    );
+    if (submission?.pauseReason) return submission;
+    if (!submission?.submitted) throw new Error(submission?.error || "四川航空官网未确认查询");
+  }
+
+  do {
+    const current = await tabsApi.get(tab.id);
+    if (current.status === "complete") {
+      if (onBooking(current)) return null;
+      const issue = await tabsApi.sendMessage(tab.id, { type: "GET_SICHUAN_SEARCH_ISSUE" }, { frameId: 0 }).catch(() => null);
+      if (issue?.pauseReason) return issue;
+      if (issue?.error) throw new Error(issue.error);
+    }
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  } while (Date.now() < deadline);
+  throw new Error("四川航空官网未跳转到航班查询结果");
+}
+
+export async function openSichuanAirQuoteSearch(tabsApi, quote, timeoutMs = 45_000) {
+  const searchUrl = quote?.airlineCode === "3U" ? buildQuoteSearchUrl(quote) : null;
+  if (!searchUrl) throw new Error("四川航空报价缺少可查询的航线或出行日期");
+
+  const tab = await tabsApi.create({ url: searchUrl, active: true });
+  if (tab?.id == null) throw new Error("无法打开四川航空查询标签页");
+  const resultUrl = buildSichuanAirResultUrl(searchUrl);
+  await waitForTabComplete(tabsApi, tab, timeoutMs);
+  const issue = await reachSichuanAirBooking(tabsApi, tab, { searchUrl, resultUrl }, timeoutMs);
+  if (issue) return issue;
+  const response = await withTimeout(sendToAirlineFrame(tabsApi, tab.id, {
+    type: "CHECK_SICHUAN_AIR_RESULT", resultUrl, travelDate: quote.travelDate,
+  }), timeoutMs, "四川航空结果页检查");
+  if (!response?.submitted && !response?.pauseReason) {
+    throw new Error(response?.error || "四川航空未进入指定航线和日期的查询结果");
   }
   return response;
 }
@@ -242,8 +295,8 @@ export function createCollector({
       manualVerification: message ? { taskIndex, message } : { taskIndex },
       tasks: run.tasks.map((entry) => entry === task ? { ...task, status: "awaiting-manual" } : entry),
     };
-    const { requestId, airlineCode, searchUrl } = request;
-    const watch = { requestId, airlineCode, searchUrl };
+    const { requestId, airlineCode, searchUrl, resultUrl, travelDate } = request;
+    const watch = { requestId, airlineCode, searchUrl, ...(resultUrl ? { resultUrl, travelDate } : {}) };
     await sessionArea.set({ [VERIFICATION_KEY]: { runId: run.id, taskIndex, tabId, plans, watch } });
     try {
       await storage.saveRun(pausedRun);
@@ -262,8 +315,8 @@ export function createCollector({
       : null;
     try {
       const response = await withTimeout(
-        request.airlineCode === "GJ"
-          ? sendLoongAirMessage(tabsApi, tabId, request)
+        request.airlineCode === "GJ" || request.airlineCode === "3U"
+          ? sendToAirlineFrame(tabsApi, tabId, request)
           : tabsApi.sendMessage(tabId, request),
         timeoutMs,
         "Airline response",
@@ -310,7 +363,7 @@ export function createCollector({
         adultCount: 1,
         cabin: "economy",
       };
-      const searchUrl = adapter.buildSearchUrl({ plan: travelPlan, travelDate: task.travelDate });
+      const searchUrl = adapter.buildSearchUrl({ plan: travelPlan, travelDate: task.travelDate, airportRoute: task.airportRoute });
       if (typeof searchUrl !== "string" || !searchUrl.startsWith("https://")) {
         throw new Error("Airline adapter returned an invalid HTTPS URL");
       }
@@ -332,10 +385,14 @@ export function createCollector({
         searchUrl,
         trigger: run.trigger,
       };
+      if (task.airlineCode === "3U") request.resultUrl = buildSichuanAirResultUrl(searchUrl);
       let response;
       try {
-        await waitForTabComplete(tabsApi, tab, timeoutMs);
-        response = await requestResult(tabId, request, adapter);
+        const loadedTab = await waitForTabComplete(tabsApi, tab, timeoutMs);
+        const issue = request.resultUrl ? await reachSichuanAirBooking(tabsApi, loadedTab, request, timeoutMs) : null;
+        response = issue
+          ? { type: "COLLECTION_PAUSED", requestId, airlineCode: task.airlineCode, reason: issue.pauseReason }
+          : await requestResult(tabId, request, adapter);
       } catch (error) {
         if (retainedTabId == null) throw error;
         await getRetainedTab(tabId);
@@ -365,7 +422,7 @@ export function createCollector({
       const observations = normalizeObservations(
         travelPlan,
         task.airlineCode,
-        response.rows,
+        request.resultUrl ? response.rows?.filter((row) => row?.travelDate === task.travelDate) : response.rows,
         currentTimestamp(),
         run.trigger,
       );
@@ -383,13 +440,11 @@ export function createCollector({
     if (!checkpoint) {
       run.tasks = plans.flatMap((plan) =>
         plan.travelDates.flatMap((travelDate) =>
-          plan.airlineCodes.map((airlineCode) => ({
-            planId: plan.id,
-            travelDate,
-            airlineCode,
-            status: "pending",
-            observationCount: 0,
-          })),
+          plan.airlineCodes.flatMap((airlineCode) => {
+            const task = { planId: plan.id, travelDate, airlineCode, status: "pending", observationCount: 0 };
+            const routes = adapters[airlineCode]?.buildSearchRoutes?.({ plan });
+            return routes?.length ? routes.map((airportRoute) => ({ ...task, airportRoute })) : [task];
+          }),
         ),
       );
       await storage.saveRun(run);
@@ -498,7 +553,7 @@ export function createCollector({
       if (!watch || message.requestId !== watch.requestId || message.airlineCode !== watch.airlineCode) {
         return { accepted: false };
       }
-      if (!matchesSearchUrl(sender.url, watch.searchUrl) || !Array.isArray(message.rows)) {
+      if (!matchesSearchUrl(sender.url, watch.resultUrl ?? watch.searchUrl) || !Array.isArray(message.rows)) {
         return { accepted: false, retry: true };
       }
 
@@ -506,8 +561,9 @@ export function createCollector({
       const task = run.tasks[checkpoint.taskIndex];
       const plan = checkpoint.plans.find(({ id }) => id === task.planId);
       if (!plan) return { accepted: false };
-      const rows = message.rows.filter((row) => row && typeof row === "object")
-        .map((row) => ({ ...row, sourceUrl: sender.url }));
+      const rows = message.rows.filter((row) => row && typeof row === "object" &&
+          (!watch.resultUrl || row.travelDate === task.travelDate))
+        .map((row) => ({ ...row, sourceUrl: watch.resultUrl ?? sender.url }));
       const observations = normalizeObservations(
         { ...plan, travelDates: [task.travelDate] },
         task.airlineCode,

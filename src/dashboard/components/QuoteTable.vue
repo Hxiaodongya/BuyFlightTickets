@@ -79,12 +79,12 @@
             </td>
             <td class="quote-action-column">
               <el-button
-                v-if="row.searchUrl && row.airlineCode === 'GJ'"
+                v-if="row.searchUrl && formQuoteMessages[row.airlineCode]"
                 class="quote-search-link"
                 link
                 :loading="openingQuoteId === row.id"
                 :aria-label="quoteSearchLabel(row)"
-                @click="openLoongAirQuote(row)"
+                @click="openFormQuote(row)"
               >跳转 <span aria-hidden="true">↗</span></el-button>
               <a v-else-if="row.searchUrl" class="quote-search-link" :href="row.searchUrl" :aria-label="quoteSearchLabel(row)" target="_blank" rel="noopener noreferrer">跳转 <span aria-hidden="true">↗</span></a>
               <span v-else class="muted-text">不可用</span>
@@ -114,6 +114,7 @@ defineEmits(["clear-selection"]);
 const priceOrder = ref(null);
 const openingQuoteId = ref(null);
 const tableScroll = ref(null);
+const formQuoteMessages = { GJ: "OPEN_LOONG_AIR_QUOTE", "3U": "OPEN_SICHUAN_AIR_QUOTE" };
 const highlightedIds = computed(() => new Set(props.selection?.observationIds));
 const rows = computed(() => sortPriceHistoryRows(props.observations, priceOrder.value).map((observation) => ({
   ...observation, searchUrl: buildQuoteSearchUrl(observation),
@@ -155,12 +156,12 @@ function quoteSearchLabel(row) {
   return `跳转至${row.airlineName || row.airlineCode}航班查询结果：${row.flightNo}，${row.travelDate}（新标签页）`;
 }
 
-async function openLoongAirQuote(row) {
+async function openFormQuote(row) {
   if (openingQuoteId.value !== null) return;
   openingQuoteId.value = row.id;
   try {
     const response = await chrome.runtime.sendMessage({
-      type: "OPEN_LOONG_AIR_QUOTE",
+      type: formQuoteMessages[row.airlineCode],
       quote: {
         airlineCode: row.airlineCode,
         originCityId: row.originCityId,
@@ -168,10 +169,11 @@ async function openLoongAirQuote(row) {
         originCode: row.originCode,
         destinationCode: row.destinationCode,
         travelDate: row.travelDate,
+        sourceUrl: row.sourceUrl,
       },
     });
     if (response?.error) throw new Error(response.error);
-    if (response?.pauseReason === "human-verification") ElMessage.warning("请在长龙航空官网标签页手动验证");
+    if (response?.pauseReason === "human-verification") ElMessage.warning(`请在${row.airlineName || "航司"}官网标签页手动验证`);
   } catch (error) {
     ElMessage.error(error.message);
   } finally {

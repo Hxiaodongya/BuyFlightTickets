@@ -93,7 +93,7 @@ const chartFrame = ref(null);
 const width = ref(1000);
 const previewKey = ref(null);
 let dismissTimer;
-const shortAirlineNames = { CA: "国航", CZ: "南航", GJ: "长龙" };
+const shortAirlineNames = { CA: "国航", CZ: "南航", GJ: "长龙", "3U": "川航" };
 const lanes = [0, -1, 1, -2, 2];
 
 watch(chartFrame, (frame, _previous, onCleanup) => {

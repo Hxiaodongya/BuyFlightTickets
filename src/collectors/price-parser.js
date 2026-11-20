@@ -1,5 +1,5 @@
 (function installFlightPriceParser(root) {
-  const FLIGHT_NUMBER_PATTERN = /\b(?:CA|CZ)\s*\d{2,4}\b/gi;
+  const FLIGHT_NUMBER_PATTERN = /\b(?:CA|CZ|3U)\s*\d{2,4}\b/gi;
   const CNY_FARE_PATTERN = /(?:CNY\s*|[¥￥]\s*)((?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?)(?![\d,.])/i;
   const CLOCK_PATTERN = /\b(?:[01]\d|2[0-3]):[0-5]\d\b/;
   const DATE_PATTERN = /\b\d{4}-\d{2}-\d{2}\b/;
@@ -203,15 +203,75 @@
     };
   }
 
+  function collectSichuanAir(document) {
+    const table = document.querySelector("#main .zt-flight-choose");
+    const headers = Array.from(table?.querySelector(".tbh-section .th-tr")?.children ?? [], textOf);
+    const cards = Array.from(table?.querySelectorAll(".tbd-section .tb-tr") ?? []);
+    const visibleCards = cards.filter(isVisible);
+    const rows = [];
+    let flightNumberCardCount = 0;
+    let economyFareCardCount = 0;
+
+    for (const card of visibleCards) {
+      const flight = card.children[0];
+      if (!flight) continue;
+      const flightNumbers = [...flight.querySelectorAll(".route-info .flight-code")].filter(isVisible).map(textOf);
+      if (flightNumbers.some((number) => /\b3U\s*\d{2,4}\b/i.test(number))) flightNumberCardCount += 1;
+      let lowestFare;
+      if (card.children.length !== headers.length) continue;
+      for (const [index, label] of headers.entries()) {
+        if (!label.endsWith("经济舱")) continue;
+        const price = card.children[index].querySelector(".ticket-price");
+        if (!isVisible(price)) continue;
+        const fareText = textOf(price);
+        const amount = parseListedFare(fareText);
+        if (amount !== null && (!lowestFare || amount < lowestFare.amount)) {
+          lowestFare = { fareText, amount };
+        }
+      }
+      if (!lowestFare) continue;
+
+      economyFareCardCount += 1;
+      const departureDate = textOf(flight.querySelector(".route-start .route-date"));
+      const arrivalDate = textOf(flight.querySelector(".route-end .route-date"));
+      const row = parseFlightRow({
+        flightNo: flightNumbers.join(" "),
+        segmentCount: new Set(flightNumbers).size,
+        fareText: lowestFare.fareText,
+        fareProduct: "最低经济舱",
+        cabin: "economy",
+        routeText: textOf(flight),
+        departure: textOf(flight.querySelector(".route-start .route-time")),
+        arrival: `${textOf(flight.querySelector(".route-end .route-time"))} ${arrivalDate}`,
+        duration: textOf(flight.querySelector(".period-time")),
+      }, "3U");
+      const travelDate = departureDate.match(DATE_PATTERN)?.[0];
+      if (row && travelDate) rows.push({ ...row, travelDate });
+    }
+
+    return {
+      rows,
+      diagnostics: {
+        candidateCount: cards.length,
+        visibleCardCount: visibleCards.length,
+        flightNumberCardCount,
+        economyFareCardCount,
+        parsedRowCount: rows.length,
+      },
+    };
+  }
+
   function collectVisibleRows(document, airlineCode) {
     if (airlineCode === "CA") return collectAirChinaRows(document);
     if (airlineCode === "CZ") return collectChinaSouthernRows(document);
     if (airlineCode === "GJ") return collectLoongAir(document).rows;
+    if (airlineCode === "3U") return collectSichuanAir(document).rows;
     return [];
   }
 
   function collectVisibleRowsWithDiagnostics(document, airlineCode) {
     if (airlineCode === "GJ") return collectLoongAir(document);
+    if (airlineCode === "3U") return collectSichuanAir(document);
     const selectors = {
       CA: {
         card: '[class*="style_tableContentWrapper__"] [class*="style_singleFightWrapper__"]',

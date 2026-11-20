@@ -447,7 +447,8 @@ function runStatusType(status) {
 function taskDescription(task) {
   const plan = plans.value.find((item) => item.id === task.planId);
   const route = plan ? getRouteLabel(plan) : task.planId;
-  return `${route} · ${task.travelDate} · ${AIRLINE_NAMES[task.airlineCode] ?? task.airlineCode} · ${runStatusLabel(task.status)}`;
+  const airports = task.airportRoute ? ` (${task.airportRoute})` : "";
+  return `${route}${airports} · ${task.travelDate} · ${AIRLINE_NAMES[task.airlineCode] ?? task.airlineCode} · ${runStatusLabel(task.status)}`;
 }
 
 function taskDiagnostics(diagnostics) {

@@ -4,6 +4,7 @@ export const AIRLINE_NAMES = Object.freeze({
   CA: "中国国际航空",
   CZ: "中国南方航空",
   GJ: "长龙航空",
+  "3U": "四川航空",
 });
 
 export function isValidDate(value) {

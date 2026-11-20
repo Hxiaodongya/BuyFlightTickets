@@ -1,6 +1,10 @@
 import { findCityByAirportCode, getCityById } from "../shared/cities.js";
 import { isValidDate } from "../shared/domain.js";
 
+const sichuanAirHome = "https://www.sichuanair.com";
+const sichuanAirBooking = "https://flights.sichuanair.com";
+const airportRoutePattern = /^[A-Z]{3}-[A-Z]{3}$/;
+
 function getRouteCities(plan) {
   const origin = getCityById(plan.originCityId);
   const destination = getCityById(plan.destinationCityId);
@@ -52,6 +56,48 @@ function createAirlineAdapter(buildRouteSearchUrl) {
   });
 }
 
+function airportRoutes(origin, destination) {
+  return origin.airportRange.split("-").flatMap((from) =>
+    destination.airportRange.split("-").filter((to) => from !== to).map((to) => `${from}-${to}`),
+  );
+}
+
+function buildSichuanAirSearchUrl(route, travelDate) {
+  if (!airportRoutePattern.test(route) || !isValidDate(travelDate)) return null;
+  const [from, to] = route.split("-");
+  const url = new URL(sichuanAirHome);
+  url.search = new URLSearchParams({
+    flightTrackerFrom: from,
+    flightTrackerTo: to,
+    flightTrackerDate: travelDate,
+  }).toString();
+  return url.href;
+}
+
+export function buildSichuanAirResultUrl(searchUrl) {
+  const url = new URL(searchUrl);
+  const route = `${url.searchParams.get("flightTrackerFrom")}-${url.searchParams.get("flightTrackerTo")}`;
+  if (url.origin !== sichuanAirHome || !airportRoutePattern.test(route)) {
+    throw new Error("四川航空缺少有效的机场航线");
+  }
+  return `${sichuanAirBooking}/3uair/ibe/ticket/${route.toLowerCase()}.html`;
+}
+
+function getSichuanAirSearchRoutes({ plan }) {
+  const { origin, destination } = getRouteCities(plan);
+  return airportRoutes(getCitySearchLocation(origin), getCitySearchLocation(destination));
+}
+
+function getSichuanAirSourceRoute(sourceUrl) {
+  try {
+    const url = new URL(sourceUrl);
+    if (url.origin !== sichuanAirBooking) return null;
+    return url.pathname.match(/^\/3uair\/ibe\/ticket\/([a-z]{3}-[a-z]{3})\.html$/i)?.[1].toUpperCase() ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export const airlineAdapters = Object.freeze({
   CA: createAirlineAdapter(({ origin, destination, travelDate }) => {
     const route = `${origin.routeCode.toLowerCase()}-${destination.routeCode.toLowerCase()}`;
@@ -82,10 +128,21 @@ export const airlineAdapters = Object.freeze({
     }).toString();
     return url.href;
   }),
+  "3U": Object.freeze({
+    buildSearchRoutes: getSichuanAirSearchRoutes,
+    buildSearchUrl({ plan, travelDate, airportRoute }) {
+      return buildSichuanAirSearchUrl(airportRoute ?? getSichuanAirSearchRoutes({ plan })[0], travelDate);
+    },
+    buildRouteSearchUrl({ origin, destination, travelDate, sourceUrl }) {
+      const routes = airportRoutes(origin, destination);
+      const sourceRoute = getSichuanAirSourceRoute(sourceUrl);
+      return buildSichuanAirSearchUrl(routes.includes(sourceRoute) ? sourceRoute : routes[0], travelDate);
+    },
+  }),
 });
 
 export function buildQuoteSearchUrl(quote) {
-  const { airlineCode, travelDate } = quote;
+  const { airlineCode, travelDate, sourceUrl } = quote;
   if (!Object.hasOwn(airlineAdapters, airlineCode) || !isValidDate(travelDate)) {
     return null;
   }
@@ -96,5 +153,5 @@ export function buildQuoteSearchUrl(quote) {
     return null;
   }
 
-  return airlineAdapters[airlineCode].buildRouteSearchUrl({ origin, destination, travelDate });
+  return airlineAdapters[airlineCode].buildRouteSearchUrl({ origin, destination, travelDate, sourceUrl });
 }

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "航班价格追踪",
   "version": "0.1.0",
-  "description": "在本地记录国航、南航和长龙航空的公开航班列表价变化。",
+  "description": "在本地记录国航、南航、长龙航空和四川航空的公开航班列表价变化。",
   "icons": {
     "16": "icons/flight-tracker-16.png",
     "32": "icons/flight-tracker-32.png",
@@ -10,6 +10,7 @@
     "128": "icons/flight-tracker-128.png"
   },
   "permissions": ["alarms", "storage"],
+  "host_permissions": ["https://flights.sichuanair.com/*"],
   "background": {
     "service_worker": "src/background/service-worker.js",
     "type": "module"
@@ -25,7 +26,9 @@
     {
       "matches": [
         "https://www.airchina.com.cn/flight/oneway/*",
-        "https://b2c.csair.com/B2C40/newTrips/static/main/page/booking/index.html*"
+        "https://b2c.csair.com/B2C40/newTrips/static/main/page/booking/index.html*",
+        "https://flights.sichuanair.com/3uair/ibe/ticket/*",
+        "https://flights.sichuanair.com/3uair/ibe/common/processSearchForm.do*"
       ],
       "js": [
         "src/collectors/price-parser.js",
@@ -39,6 +42,14 @@
         "src/collectors/price-parser.js",
         "src/collectors/loong-air-page.js",
         "src/collectors/result-page.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://www.sichuanair.com/?flightTrackerFrom=*"],
+      "js": [
+        "src/collectors/price-parser.js",
+        "src/collectors/sichuan-air-search.js"
       ],
       "run_at": "document_idle"
     }

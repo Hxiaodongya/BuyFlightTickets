@@ -4,6 +4,7 @@
     "www.airchina.com.cn": { code: "CA", name: "国航" },
     "b2c.csair.com": { code: "CZ", name: "南航" },
     "www.loongair.cn": { code: "GJ", name: "长龙航空" },
+    "flights.sichuanair.com": { code: "3U", name: "四川航空" },
   }[location.hostname];
   if (!airline) return;
   const loongAir = airline.code === "GJ" ? globalThis.FlightTrackerLoongAir : null;
@@ -164,12 +165,16 @@
     return null;
   }
 
-  function matchesSearch(expectedUrl) {
+  function matchesSearch(expectedUrl, travelDate) {
     if (loongAir) return loongAir.matchesResult(expectedUrl);
     const currentUrl = new URL(location.href);
-    return currentUrl.origin === expectedUrl.origin &&
+    const matchesUrl = currentUrl.origin === expectedUrl.origin &&
       currentUrl.pathname === expectedUrl.pathname &&
       [...expectedUrl.searchParams].every(([name, value]) => currentUrl.searchParams.get(name) === value);
+    if (!matchesUrl || airline.code !== "3U") return matchesUrl;
+    const summary = document.querySelector("#main .route-resume .date");
+    const date = summary?.textContent?.match(/\b\d{4}-\d{2}-\d{2}\b/)?.[0];
+    return summary?.getClientRects().length > 0 && Boolean(travelDate) && date === travelDate;
   }
 
   function detectCurrentPageIssue(options) {
@@ -178,22 +183,29 @@
       : parser.detectPageIssue(document.body?.innerText, options);
   }
 
+  function readResults(travelDate) {
+    const collection = parser.collectVisibleRowsWithDiagnostics(document, airline.code);
+    if (airline.code !== "3U") return collection;
+    const rows = collection.rows.filter((row) => row.travelDate === travelDate);
+    return { rows, diagnostics: { ...collection.diagnostics, parsedRowCount: rows.length } };
+  }
+
   function watchVerificationResults(request) {
     if (!request?.requestId || request.airlineCode !== airline.code || !request.searchUrl) return false;
     if (verificationWatch?.requestId === request.requestId) return true;
     if (verificationWatch) clearInterval(verificationWatch.timer);
 
-    const expectedUrl = new URL(request.searchUrl);
+    const expectedUrl = new URL(request.resultUrl ?? request.searchUrl);
     let signature = null;
     let stableSince;
     let sending = false;
     const timer = setInterval(async () => {
       if (sending) return;
-      if (!matchesSearch(expectedUrl) || loongAir?.isLoading() || detectCurrentPageIssue()) {
+      if (!matchesSearch(expectedUrl, request.travelDate) || loongAir?.isLoading() || detectCurrentPageIssue()) {
         signature = null;
         return;
       }
-      const collection = parser.collectVisibleRowsWithDiagnostics(document, airline.code);
+      const collection = readResults(request.travelDate);
       if (!collection.rows.length) {
         signature = null;
         return;
@@ -228,8 +240,8 @@
     return true;
   }
 
-  async function waitForResults(searchUrl) {
-    const expectedUrl = new URL(searchUrl);
+  async function waitForResults({ searchUrl, resultUrl, travelDate }) {
+    const expectedUrl = new URL(resultUrl ?? searchUrl);
     if (loongAir) {
       const submission = await loongAir.submitSearch(expectedUrl);
       if (submission.pauseReason) return submission;
@@ -258,11 +270,15 @@
       const pageIssue = detectCurrentPageIssue({ includeNoFlights: false });
       if (pageIssue?.reason === "human-verification") return { pauseReason: pageIssue.reason };
       if (pageIssue) throw new Error(pageIssue.message);
-      if (!matchesSearch(expectedUrl)) {
+      if (!matchesSearch(expectedUrl, travelDate)) {
+        if (airline.code === "3U") {
+          const noFlights = detectCurrentPageIssue();
+          if (noFlights?.message) throw new Error(noFlights.message);
+        }
         throw new Error(`${airline.name}结果页与查询的航线或日期不匹配，未保存价格`);
       }
 
-      const collection = parser.collectVisibleRowsWithDiagnostics(document, airline.code);
+      const collection = readResults(travelDate);
       const isLoongAirLoading = loongAir?.isLoading();
       latestRows = isLoongAirLoading ? [] : collection.rows;
       const notice = airline.code === "CA" && latestRows.length > 0
@@ -305,7 +321,7 @@
             rowsStableSince = Date.now();
           } else if (Date.now() - rowsStableSince >= resultStableDuration) {
             return {
-              rows: latestRows.map((row) => ({ ...row, sourceUrl: location.href })),
+              rows: latestRows.map((row) => ({ ...row, sourceUrl: resultUrl ?? location.href })),
               diagnostics: latestDiagnostics,
             };
           }
@@ -351,6 +367,14 @@
   }
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request?.type === "CHECK_SICHUAN_AIR_RESULT" && airline.code === "3U") {
+      const issue = detectCurrentPageIssue({ includeNoFlights: false });
+      if (issue?.reason) sendResponse({ pauseReason: issue.reason });
+      else if (issue) sendResponse({ error: issue.message });
+      else if (matchesSearch(new URL(request.resultUrl), request.travelDate)) sendResponse({ submitted: true });
+      else sendResponse({ error: "四川航空未进入指定航线和日期的查询结果" });
+      return false;
+    }
     if (request?.type === "OPEN_LOONG_AIR_QUOTE" && loongAir) {
       loongAir.submitSearch(new URL(request.searchUrl)).then(
         sendResponse,
@@ -371,7 +395,7 @@
       requestId: request.requestId,
       airlineCode: airline.code,
     };
-    waitForResults(request.searchUrl).then(
+    waitForResults(request).then(
       ({ rows, diagnostics, pauseReason }) => sendResponse(pauseReason
         ? { ...response, type: "COLLECTION_PAUSED", reason: pauseReason }
         : { ...response, rows, diagnostics }),

@@ -33,7 +33,7 @@ import { computed, ref } from "vue";
 
 const props = defineProps({ run: { type: Object, required: true } });
 const emit = defineEmits(["change"]);
-const airlineNames = { CA: "国航", CZ: "南航", GJ: "长龙航空" };
+const airlineNames = { CA: "国航", CZ: "南航", GJ: "长龙航空", "3U": "四川航空" };
 const description = computed(() => {
   const { taskIndex, message } = props.run.manualVerification;
   const task = props.run.tasks?.[taskIndex];
